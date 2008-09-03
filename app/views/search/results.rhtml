@@ -1,0 +1,7 @@
+<p>
+	<%= link_to 'back to beginning', :action => 'index' %>
+</p>
+<br/>
+<% @entries.each do |entry| %>
+	<p><%= link_to entry, {:controller => 'copy', :action => 'show', :s => @search.id, :url => entry} %></p>
+<% end %>
