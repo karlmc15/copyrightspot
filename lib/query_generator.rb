@@ -22,40 +22,40 @@ module QueryGenerator
     end
     
     def form_query(list)
-      query = ''
       size = list.size
       counter = 1
-      list.each do |q|
-        query << "\"#{q}\"#{' OR ' unless counter == size}"
+      list.inject('') do |query_string, query|
+        query_string << "\"#{query}\"#{' OR ' unless counter == size}"
         counter += 1
+        query_string
       end
-      return query
     end
     
     def chop_long_terms(terms)
-      col = []
-      terms.each do |term|
+      terms.inject([]) do |col, term|
         # form term array of words
-        ta = term.scan(/\w+/)
+        ta = term.split
         term_size = ta.size
         # now check for huge text blocks and seperate them up
-        if term_size >= 21
-          (term_size / 15).times do 
-            len = term_size > 21 ? 15 : term_size
+        if term_size >= 18
+          (term_size / 12).times do 
+            len = term_size > 18 ? 12 : term_size
             text = ta.slice!(0..len)
             add_to_collection(text, col)
           end  
           # collect remaing text after chopping up 
           add_to_collection(ta, col)
         else
-          col << term
+          add_to_collection(ta, col)
         end
+        col
       end
-      col
     end
     
+    # don't add word groups of less then 7 so we cut down on some of the noise 
+    # from search engine results
     def add_to_collection(text, col)
-      col << text.join(' ') unless text.size < 5 || col.include?(text.join(' '))
+      col << text.join(' ') unless text.size < 7 || col.include?(text.join(' '))
     end
     
   end 

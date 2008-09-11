@@ -1,8 +1,8 @@
 module Constants
   
   SEARCH_TAG_SCRUB_CONFIG = {
-    :search_tags    => { :short_terms => %w(h1 h2 h3 h4 h5 h6), :long_terms =>  %w(li p span pre q code div) },
-    :remove         => %w(script form comments style img meta head)
+    :search_tags    => %w(h1 h2 h3 h4 h5 h6 li p span pre q code div),
+    :remove         => %w(script noscript comments style img head meta)
   }
   
   STOP_WORDS = [
