@@ -1,10 +1,10 @@
 
 development:
-  database: cs_development
-  adapter: postgresql
-  encoding: unicode
-  username: postgres
-  password:
+  database: copyrightspot_development
+  adapter: mysql
+  encoding: utf8
+  username: ruby
+  password: qwerty89  
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".

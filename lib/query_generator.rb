@@ -9,8 +9,6 @@ module QueryGenerator
 
     def prepare_search(terms)
       queries = chop_long_terms(terms)
-      puts "HERE ARE THE QUERIES ************"
-      pp queries
       a = []
       while queries.size > 2
         n = 2
