@@ -11,8 +11,7 @@ class Discover
     # so we create a two dimesional array with query and url
     query_map_data = queries.inject([]){|map_data,query| map_data << [query, url]}
     job = Skynet::Job.new(
-      :mappers          => 6,
-      :reducers         => 1,
+      :mappers          => 3,
       :map_reduce_class => self,
       :map_data         => query_map_data
     )    
@@ -20,6 +19,7 @@ class Discover
   end
   
   def self.map(query_map_data)
+    #info "HERE IS THE QUERY MAP DATA BEING PASSED TO DISCOVER MAP METHOD ******************** #{query_map_data[0]} | #{query_map_data[1]}"
     query_map_data.inject([]) do |sites, map_data|
       info "THIS IS THE QUERY USED ***************************** #{map_data[0]}"
       search = CGI.escape("#{map_data[0]} -site:#{map_data[1]}")

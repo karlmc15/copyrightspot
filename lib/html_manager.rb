@@ -154,27 +154,6 @@ module HtmlManager
       ensure_unique(found_words_list)
     end
     
-    def ensure_unique(found_words_list)
-      counter = 0
-      found_words_list.inject([]) do |list, fw|
-        if counter == 0
-          list << fw
-        else
-          # check if previous entry already encompasses this search result
-          # don't add entry if it has been covered
-          unless found_words_list[counter - 1].word_coverage > fw.word_coverage
-            list << fw
-          end
-        end
-        counter += 1
-        list
-      end
-    end
-    
-    def get_text(found_index, d_sw, text)
-      text[found_index, d_sw.search_size]
-    end
-    
     # make a hash with group words index in search_terms array as key and grep regex as value
     def create_grep_list(search_list)
       search_list.inject([]) do |grep_list, term|

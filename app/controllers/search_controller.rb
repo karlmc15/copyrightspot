@@ -6,29 +6,25 @@ class SearchController < ApplicationController
   def find 
     @search = Search.new(:url => params[:search])
     if @search.save
-      jobs = Bj.submit "./script/runner ./jobs/discover_manager.rb #{@search.id}", :tag => 'discover copied content' 
-      session[:job_key] = jobs.first.bj_job_id
-      session[:job_search_id] = @search.id
-      render :action => 'searching'
+      # discover manager returns job id
+      DiscoverManager.run(@search.id)
+      redirect_to :action => 'show', :s => @search.id
     end
   end
   
   def update
     if request.xhr?
-      bj = Bj.table.job.find(session[:job_key].to_i)
-      if bj.finished?
-        # completed without errors
-        if bj.exit_status == 0
-          search_id = session[:job_search_id]
-          session[:job_search_id] = nil
-          session[:job_key] = nil
-          render :update do |page|
-            page.redirect_to :action => 'show', :s => search_id
-          end
-        else
-          render :update do |page|
-            page.redirect_to :action => 'index'
-          end
+      puts "I'M TRYING TO GET THIS JOB ****************** #{session[:job_id]}"
+      dj = DiscoverJob.find_by_id(session[:job_id].to_i)
+      if dj.status == DiscoverJob::COMPLETE
+        session[:job_id] = nil
+        render :update do |page|
+          page.redirect_to :action => 'show', :s => dj.search_id
+        end
+      elsif dj.status == DiscoverJob::ERROR
+        session[:job_id] = nil
+        render :update do |page|
+          page.redirect_to :action => 'index'
         end
       else
         render :text => 'still working on finding copies of your content ...'
