@@ -10,15 +10,15 @@ development:
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
-  database: cs_test
-  adapter: postgresql
-  encoding: unicode
-  username: postgres
-  password:
+  database: cspot_test
+  adapter: mysql
+  encoding: utf8
+  username: ruby
+  password: qwerty89
 
 production:
-  database: cs_production
-  adapter: postgresql
-  encoding: unicode
-  username: postgres
-  password:
+  database: cspot_production
+  adapter: mysql
+  encoding: utf8
+  username: cspotr
+  password: 14myh0m1e5
