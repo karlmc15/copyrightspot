@@ -1,7 +1,7 @@
 class Highlight
   
   def self.run(text, search_words_list)
-    pool = ThreadPool.new(10)
+    pool = ThreadPool.new(20)
     @found_words = []
     @text = text
     search_words = search_words_list.inject([]){ |list, words| list << SearchWords.new(words) }

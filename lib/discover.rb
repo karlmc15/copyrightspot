@@ -6,7 +6,7 @@ class Discover
   YAHOO_APPID = "R.3xNFTV34FQGQur.Ao9J17kyngB7458WBnwbpYK9BXQe4pqEGwSs.8F96tbPpkH"
   
   def self.run(queries, url)
-    pool = ThreadPool.new(10)
+    pool = ThreadPool.new(20)
     @sites = []
     @url = url
     queries.each do |query|

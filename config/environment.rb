@@ -77,5 +77,10 @@ require 'mechanize'
 require 'tidy'
 require 'bj'
 
-# initialize the Tidy library path
-Tidy.path = '/usr/lib/libtidy.dylib'
+if RAILS_ENV == 'test'
+  # initialize the Tidy library path
+  Tidy.path = '/usr/lib/libtidy.so'
+else
+  # initialize the Tidy library path
+  Tidy.path = '/usr/lib/libtidy.dylib'
+end
