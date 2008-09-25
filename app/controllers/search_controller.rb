@@ -7,28 +7,45 @@ class SearchController < ApplicationController
     @search = Search.new(:url => params[:search])
     if @search.save
       # discover manager returns job id
-      DiscoverManager.run(@search.id)
-      redirect_to :action => 'show', :s => @search.id
+      jobs = Bj.submit "./script/runner ./jobs/discover_job.rb #{@search.id}", :tag => 'discover'     
+      session[:job_id] = jobs.first.bj_job_id
+      session[:job_search_id] = @search.id
+      render :template => '/shared/searching'
     end
   end
   
   def update
     if request.xhr?
-      puts "I'M TRYING TO GET THIS JOB ****************** #{session[:job_id]}"
-      dj = DiscoverJob.find_by_id(session[:job_id].to_i)
-      if dj.status == DiscoverJob::COMPLETE
-        session[:job_id] = nil
-        render :update do |page|
-          page.redirect_to :action => 'show', :s => dj.search_id
-        end
-      elsif dj.status == DiscoverJob::ERROR
-        session[:job_id] = nil
-        render :update do |page|
-          page.redirect_to :action => 'index'
+      bj = Bj.table.job.find(session[:job_id].to_i)
+      if bj.finished?
+        # completed without errors
+        if bj.exit_status == 0
+          render :update do |page| 
+            session[:job_id] = nil
+            search_id = session[:job_search_id].to_i
+            session[:job_search_id] = nil
+            page.redirect_to :action => 'show', :s => search_id        
+          end    
+        else         
+          session[:job_id] = nil
+          session[:job_search_id] = nil
+          #handle errors
+          render :update do |page|
+            page.redirect_to :action => 'index'
+          end
         end
       else
-        render :text => 'still working on finding copies of your content ...'
+         render :text => 'still working on discovering your content ...'
       end
+    else
+       redirect_to '/'
+    end
+  rescue 
+    logger.error("#{self} AJAX ADD PROGRESS ERRORS ** #{$!}")
+    render :update do |page|
+     session[:job_id] = nil
+     session[:job_search_id] = nil
+     page.redirect_to( '/')
     end
   end
   

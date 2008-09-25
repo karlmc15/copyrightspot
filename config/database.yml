@@ -1,6 +1,6 @@
 
 development:
-  database: copyrightspot_development
+  database: cspot_development
   adapter: mysql
   encoding: utf8
   username: ruby
