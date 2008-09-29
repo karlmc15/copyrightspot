@@ -10,14 +10,14 @@ class Discover
     @sites = []
     @url = url
     queries.each do |query|
-      #pool.dispatch(query) do |query|
+      pool.dispatch(query) do |query|
         search = CGI.escape("#{query} -site:#{@url}")
         req = "http://boss.yahooapis.com/ysearch/web/v1/#{search}?appid=#{YAHOO_APPID}&format=xml&count=10"
         resp = Net::HTTP.get_response(URI.parse(req))
         @sites << parse_results(resp.body)
-      #end
+      end
     end
-    #pool.shutdown
+    pool.shutdown
     pool = nil
     save_results(@sites.flatten!, search_id)
   end

@@ -11,19 +11,17 @@ class SearchController < ApplicationController
       logger.info "THIS IS AFTER THE FIND ****************************"
        job = DiscoverJob.new(:search_id => @search.id, :status => Job::STARTING)
        job.save
-      # session[:job_id] = job.id
-      # Workling::Remote.run(:discover_worker, :run, :job_id => job.id, :search_id => @search.id)
-      # render :template => '/shared/searching'
+      session[:job_id] = job.id
+      Workling::Remote.run(:discover_worker, :run, :job_id => job.id, :search_id => @search.id)
+      render :template => '/shared/searching'
       logger.info "THIS IS BEFORE THE DISCOVER RUN *******************"
       DiscoverManager.run(@search.id, job.id)
       logger.info "THIS IS AFTER THE DISCOVER RUN ***********************"
       redirect_to :action => 'show', :s => @search.id and return false
     end
-    logger.info "WE DID NOT SAVE THE SEARCH OBJECT *********************"
-    render :text => 'FOO' and return false
   rescue Exception => e
     logger.info "exception caught: " + e.class.to_s + " inspection: " + e.inspect + "\n" + e.backtrace.join("\n")
-    render :text => 'FOO' and return false
+    render :text => 'AN ERROR HAPPENED :(' and return false
   end
   
   def update
