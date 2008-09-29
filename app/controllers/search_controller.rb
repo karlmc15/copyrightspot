@@ -20,8 +20,10 @@ class SearchController < ApplicationController
       redirect_to :action => 'show', :s => @search.id 
     end
     puts "WE DID NOT SAVE THE SEARCH OBJECT *********************"
+    render :text => 'FOO'
   rescue
     puts "WE FOUND AN ERROR ********************* #{$!}"
+    render :text => 'FOO'
   end
   
   def update
