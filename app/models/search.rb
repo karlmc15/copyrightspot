@@ -2,8 +2,8 @@ require 'base64'
 require 'uri'
 
 class Search < ActiveRecord::Base
-  has_many    :copies,        :dependent => :destroy
-  has_many    :discover_jobs,  :dependent => :destroy
+  has_many    :copies,          :dependent => :destroy
+  has_many    :search_results,  :dependent => :destroy
   
   #before_create :set_search_text
 

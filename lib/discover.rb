@@ -5,7 +5,7 @@ class Discover
   
   YAHOO_APPID = "R.3xNFTV34FQGQur.Ao9J17kyngB7458WBnwbpYK9BXQe4pqEGwSs.8F96tbPpkH"
   
-  def self.run(queries, url)
+  def self.run(queries, url, search_id)
     pool = ThreadPool.new(20)
     @sites = []
     @url = url
@@ -19,15 +19,52 @@ class Discover
     end
     pool.shutdown
     pool = nil
-    @sites.flatten.uniq
+    save_results(@sites.flatten!, search_id)
   end
   
   private 
   
+  def self.save_results(results, search_id)
+    ensure_results_unique(results).each do |result|
+      result.search_id = search_id
+      result.save
+    end  
+  end
+  
   def self.parse_results(xml)
     doc = Hpricot::XML xml
     (doc / '//result').inject([]) do |list, entry|
-      list << entry.at('/url').inner_text
+      results = {
+        :url => scrub_result(entry.at('/url')),
+        :dispurl => scrub_result(entry.at('/dispurl')),
+        :title => scrub_result(entry.at('/title')),
+        :abstract => scrub_result(entry.at('/abstract'))
+        }
+      list << SearchResult.new(results)
+    end
+  end
+  
+  def self.scrub_result(elem)
+    doc = Hpricot(elem.inner_text)
+    doc.to_plain_text
+    doc.inner_text
+  end
+  
+  def self.ensure_results_unique(results)
+    results.inject([]) do |list, result|
+      if list.collect(&:url).include?(result.url)
+        #find which result and update it's count
+        list.each do |sr|
+          if sr.url == result.url
+            sr.found_count += 1
+            break
+          end
+        end
+      else
+        # add to list
+        list << result
+      end
+      list
     end
   end
   

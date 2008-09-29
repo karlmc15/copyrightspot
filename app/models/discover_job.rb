@@ -1,0 +1,2 @@
+class DiscoverJob < Job
+end

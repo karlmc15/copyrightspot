@@ -1,5 +1,5 @@
 # This file is auto-generated from the current state of the database. Instead of editing this file, 
-# please use the migrations feature of ActiveRecord to incrementally modify your database, and
+# please use the migrations feature of Active Record to incrementally modify your database, and
 # then regenerate this schema definition.
 #
 # Note that this schema.rb definition is the authoritative source for your database schema. If you need
@@ -9,53 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 4) do
-
-  create_table "bj_config", :primary_key => "bj_config_id", :force => true do |t|
-    t.text "hostname"
-    t.text "key"
-    t.text "value"
-    t.text "cast"
-  end
-
-  create_table "bj_job", :primary_key => "bj_job_id", :force => true do |t|
-    t.text     "command"
-    t.text     "state"
-    t.integer  "priority"
-    t.text     "tag"
-    t.integer  "is_restartable"
-    t.text     "submitter"
-    t.text     "runner"
-    t.integer  "pid"
-    t.datetime "submitted_at"
-    t.datetime "started_at"
-    t.datetime "finished_at"
-    t.text     "env"
-    t.text     "stdin"
-    t.text     "stdout"
-    t.text     "stderr"
-    t.integer  "exit_status"
-  end
-
-  create_table "bj_job_archive", :primary_key => "bj_job_archive_id", :force => true do |t|
-    t.text     "command"
-    t.text     "state"
-    t.integer  "priority"
-    t.text     "tag"
-    t.integer  "is_restartable"
-    t.text     "submitter"
-    t.text     "runner"
-    t.integer  "pid"
-    t.datetime "submitted_at"
-    t.datetime "started_at"
-    t.datetime "finished_at"
-    t.datetime "archived_at"
-    t.text     "env"
-    t.text     "stdin"
-    t.text     "stdout"
-    t.text     "stderr"
-    t.integer  "exit_status"
-  end
+ActiveRecord::Schema.define(:version => 20080929045433) do
 
   create_table "copies", :force => true do |t|
     t.string   "url"
@@ -63,6 +17,27 @@ ActiveRecord::Schema.define(:version => 4) do
     t.text     "html"
     t.integer  "search_id"
     t.integer  "found_count"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "jobs", :force => true do |t|
+    t.string   "status"
+    t.string   "type"
+    t.text     "message"
+    t.text     "error"
+    t.integer  "search_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "search_results", :force => true do |t|
+    t.string   "url"
+    t.string   "dispurl"
+    t.string   "title"
+    t.text     "abstract"
+    t.integer  "search_id"
+    t.integer  "found_count", :default => 1
     t.datetime "created_at"
     t.datetime "updated_at"
   end

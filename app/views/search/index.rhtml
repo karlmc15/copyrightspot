@@ -1,7 +1,7 @@
-<div style="text-align:center;margin-top:15px;">
+<div style="text-align:center;margin-top:25px;">
 	<% form_tag :action => 'find' do %>
-		<p style="font-size:22px;line-height:35px;font-family:Arial;"><strong>Who has copied your writings?</strong></p>
-		<div><%= text_field_tag 'search', 'http://', :style => 'width:500px' %>	</div>
-		<div style="padding:0px 0px"><%= submit_tag 'Spot Infringers' %></div>
+	<%= image_tag 'cspot.gif' %>
+		<p style="font-size:20px;line-height:25px;font-family:Arial;color:gray;"><strong>Discover where your content is online</strong></p>
+		<div><%= text_field_tag 'search', 'http://', :style => 'width:500px' %>	<%= submit_tag 'Search' %></div>
 	<% end %>
 </div>

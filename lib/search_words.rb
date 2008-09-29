@@ -1,5 +1,5 @@
 class SearchWords
-  attr_accessor :text
+  attr_accessor :text, :match_location
   
   def initialize(text)
     @text   = text
@@ -12,6 +12,56 @@ class SearchWords
   
   def word_array_size
     @word_array.size
+  end
+  
+  def match_regex
+    create_regex(match_text.split)
+  end
+  
+  def match_text
+    if @match_location
+      text_list[@match_location]
+    else
+      @text
+    end
+  end
+  
+  def match_size
+    match_text.length
+  end
+  
+  def text_list
+    @collection ||= chop_text 
+  end
+  
+  def to_s
+    @text
+  end
+  
+  def chop_text
+    col = []
+    # form term array of words
+    ta = @text.split
+    text_size = ta.size
+    # now check for huge text blocks and seperate them up
+    if text_size >= 18
+      (text_size / 12).times do 
+        len = text_size > 18 ? 12 : text_size
+        text = ta.slice!(0..len)
+        add_to_collection(text, col)
+      end  
+      # collect remaing text after chopping up 
+      add_to_collection(ta, col)
+    else
+      add_to_collection(ta, col)
+    end
+    col
+  end
+  
+  # don't add word groups of less then 7 so we cut down on some of the noise 
+  # from search engine results
+  def add_to_collection(text, col)
+    col << text.join(' ') unless col.include?(text.join(' '))
   end
   
   # this should always move the shift search_words by one and continue through words_array
@@ -54,7 +104,7 @@ class SearchWords
   end
   
   def search_size
-    @search_words.join(' ').length + 21 
+    match_size + 21 
   end
   
   def create_regex(word_list)

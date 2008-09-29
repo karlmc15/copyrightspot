@@ -11,6 +11,10 @@ class FoundWords
   end
   
   def size
+    @text.length
+  end
+  
+  def word_size
     @text.split.size
   end
   
@@ -20,6 +24,10 @@ class FoundWords
   
   def first_word
     @text.split[0]
+  end
+  
+  def add_text(text)
+    @text = @text + ' ' + text
   end
   
 end

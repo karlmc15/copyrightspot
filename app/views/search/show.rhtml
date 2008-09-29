@@ -1,7 +1,19 @@
-<p>
-	<%= link_to 'back to beginning', :action => 'index' %>
-</p>
+<style type="text/css" media="screen">
+	a{color:rgb(247,148,30);}
+</style>
+
+<div style="text-align:center;margin-top:20px;">
+	<%= image_tag 'cspot_small.gif' %>
+	<p>
+		<%= link_to 'back to beginning', :action => 'index' %>
+	</p>
+</div>
+
+
 <br/>
-<% @entries.each do |entry| %>
-	<p><%= link_to entry, {:controller => 'copy', :action => 'highlight', :s => @search.id, :url => entry} %></p>
+<% @results.each do |result| %>
+	<p><strong><%= link_to result.title, {:controller => 'copy', :action => 'highlight', :s => @search.id, :url => result.url} %></strong></p>
+	<p><%= result.abstract %></p>
+	<p style="color:gray;"><%= result.url %></p>
+	<p>&nbsp;</p>
 <% end %>

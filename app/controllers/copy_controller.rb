@@ -3,10 +3,8 @@ class CopyController < ApplicationController
   def highlight
     @copy = Copy.new(:url => params[:url], :search_id => params[:s].to_i)
     if @copy.save
-      jobs = Bj.submit "./script/runner ./jobs/highlight_job.rb #{@copy.id}", :tag => 'highlight'     
-      session[:job_id] = jobs.first.bj_job_id
-      session[:job_copy_id] = @copy.id
-      render :template => '/shared/searching'
+      HighlightManager.run(@copy.id)
+      redirect_to :action => 'show', :id => @copy.id
     end
   end
   
