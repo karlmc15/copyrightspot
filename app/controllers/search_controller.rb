@@ -9,15 +9,11 @@ class SearchController < ApplicationController
     logger.info "THIS IS BEFORE THE SAVE FOR FIND ******************"
     if @search.save
       logger.info "THIS IS AFTER THE FIND ****************************"
-       job = DiscoverJob.new(:search_id => @search.id, :status => Job::STARTING)
-       job.save
+      job = DiscoverJob.new(:search_id => @search.id, :status => Job::STARTING)
+      job.save
       session[:job_id] = job.id
       Workling::Remote.run(:discover_worker, :run, :job_id => job.id, :search_id => @search.id)
       render :template => '/shared/searching'
-      logger.info "THIS IS BEFORE THE DISCOVER RUN *******************"
-      DiscoverManager.run(@search.id, job.id)
-      logger.info "THIS IS AFTER THE DISCOVER RUN ***********************"
-      redirect_to :action => 'show', :s => @search.id and return false
     end
   rescue Exception => e
     logger.info "exception caught: " + e.class.to_s + " inspection: " + e.inspect + "\n" + e.backtrace.join("\n")
