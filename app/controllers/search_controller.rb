@@ -4,16 +4,24 @@ require 'query_generator'
 class SearchController < ApplicationController
   
   def find 
+    puts "THIS IS THE BEGINING OF THE FIND METHOD FOR SEARCH ***********************"
     @search = Search.new(:url => params[:search])
+    puts "THIS IS BEFORE THE SAVE FOR FIND ******************"
     if @search.save
+      ptuts "THIS IS AFTER THE FIND ****************************"
        job = DiscoverJob.new(:search_id => @search.id, :status => Job::STARTING)
        job.save
       # session[:job_id] = job.id
       # Workling::Remote.run(:discover_worker, :run, :job_id => job.id, :search_id => @search.id)
       # render :template => '/shared/searching'
+      puts "THIS IS BEFORE THE DISCOVER RUN *******************"
       DiscoverManager.run(@search.id, job.id)
+      puts "THIS IS AFTER THE DISCOVER RUN ***********************"
       redirect_to :action => 'show', :s => @search.id 
     end
+    puts "WE DID NOT SAVE THE SEARCH OBJECT *********************"
+  rescue
+    puts "WE FOUND AN ERROR ********************* #{$!}"
   end
   
   def update
