@@ -8,7 +8,7 @@ class SearchController < ApplicationController
     @search = Search.new(:url => params[:search])
     puts "THIS IS BEFORE THE SAVE FOR FIND ******************"
     if @search.save
-      ptuts "THIS IS AFTER THE FIND ****************************"
+      puts "THIS IS AFTER THE FIND ****************************"
        job = DiscoverJob.new(:search_id => @search.id, :status => Job::STARTING)
        job.save
       # session[:job_id] = job.id
@@ -21,8 +21,8 @@ class SearchController < ApplicationController
     end
     puts "WE DID NOT SAVE THE SEARCH OBJECT *********************"
     render :text => 'FOO'
-  rescue
-    puts "WE FOUND AN ERROR ********************* #{$!}"
+  rescue Exception => e
+    puts "exception caught: " + e.class.to_s + " inspection: " + e.inspect + "\n" + e.backtrace.join("\n")
     render :text => 'FOO'
   end
   
