@@ -6,11 +6,13 @@ class SearchController < ApplicationController
   def find 
     @search = Search.new(:url => params[:search])
     if @search.save
-      job = DiscoverJob.new(:search_id => @search.id, :status => Job::STARTING)
-      job.save
-      session[:job_id] = job.id
-      Workling::Remote.run(:discover_worker, :run, :job_id => job.id, :search_id => @search.id)
-      render :template => '/shared/searching'
+       job = DiscoverJob.new(:search_id => @search.id, :status => Job::STARTING)
+       job.save
+      # session[:job_id] = job.id
+      # Workling::Remote.run(:discover_worker, :run, :job_id => job.id, :search_id => @search.id)
+      # render :template => '/shared/searching'
+      DiscoverManager.run(@search.id, job.id)
+      redirect_to :action => 'show', :s => @search.id 
     end
   end
   
