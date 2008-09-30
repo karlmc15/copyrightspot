@@ -35,9 +35,9 @@ module QueryGenerator
         ta = term.split
         term_size = ta.size
         # now check for huge text blocks and seperate them up
-        if term_size >= 18
-          (term_size / 12).times do 
-            len = term_size > 18 ? 12 : term_size
+        if term_size >= 21
+          (term_size / 15).times do 
+            len = term_size > 21 ? 15 : term_size
             text = ta.slice!(0..len)
             add_to_collection(text, col)
           end  
@@ -53,7 +53,7 @@ module QueryGenerator
     # don't add word groups of less then 7 so we cut down on some of the noise 
     # from search engine results
     def add_to_collection(text, col)
-      col << text.join(' ') unless text.size < 7 || col.include?(text.join(' '))
+      col << text.join(' ') unless text.size < 10 || col.include?(text.join(' '))
     end
     
   end 
