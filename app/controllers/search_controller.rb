@@ -9,9 +9,8 @@ class SearchController < ApplicationController
       job = DiscoverJob.new(:search_id => @search.id, :status => Job::STARTING)
       job.save
       session[:job_id] = job.id
-      render :template => '/shared/searching'
-      # run this after the render to see if we get a quicker response from passenger
       Workling::Remote.run(:discover_worker, :run, :job_id => job.id, :search_id => @search.id)
+      render :template => '/shared/searching'
     end
   rescue Exception => e
     logger.error "exception caught: " + e.class.to_s + " inspection: " + e.inspect + "\n" + e.backtrace.join("\n")

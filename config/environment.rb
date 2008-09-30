@@ -76,6 +76,7 @@ require 'mechanize'
 require 'tidy'
 
 
+
 if RAILS_ENV == 'test'
   # initialize the Tidy library path
   Tidy.path = '/usr/lib/libtidy.so'
