@@ -62,6 +62,9 @@ class Highlight
     @found_words.compact!
     @found_words.sort!{|a, b| a.index <=> b.index} unless @found_words.blank?
     ensure_unique(@found_words)    
+  rescue Exception => e
+    logger.error "exception caught: " + e.class.to_s + " inspection: " + e.inspect + "\n" + e.backtrace.join("\n")
+    raise "#{self} -- ERROR WHEN HIGHLIGHTING FOUND TEXT :: #{e.inspect}"
   end
   
   private

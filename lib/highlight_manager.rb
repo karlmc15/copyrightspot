@@ -4,7 +4,7 @@ require 'hpricot'
 class HighlightManager
   
   def self.run(copy_id)
-    puts "#{self} - STARTED WORKER AT ********** #{Time.now}"
+    logger.info "#{self} - STARTED WORKER AT ********** #{Time.now}"
     # setup convertion map for non-ascii characters
     map = Asciify::Mapping.new(:default)
     begin
@@ -30,9 +30,9 @@ class HighlightManager
       # set copy results 
       @copy.update_attributes(:found_count => count, :html => html)
     rescue Exception => e
-      puts "exception caught: " + e.class.to_s + " inspection: " + e.inspect + "\n" + e.backtrace.join("\n")
+      logger.error "exception caught: " + e.class.to_s + " inspection: " + e.inspect + "\n" + e.backtrace.join("\n")
     end    
-    puts "#{self} - ENDED WORKER AT ********** #{Time.now}"
+    logger.info "#{self} - ENDED WORKER AT ********** #{Time.now}"
   end
   
   private
@@ -60,7 +60,7 @@ class HighlightManager
 	    # add remaining text in string scanner to new html
 	    new_html << sc.rest
     rescue Exception => e
-      puts "exception caught: " + e.class.to_s + " inspection: " + e.inspect + "\n" + e.backtrace.join("\n")
+      logger.error "exception caught: " + e.class.to_s + " inspection: " + e.inspect + "\n" + e.backtrace.join("\n")
     end
 
   end

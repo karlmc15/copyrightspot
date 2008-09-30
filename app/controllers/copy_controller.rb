@@ -6,6 +6,9 @@ class CopyController < ApplicationController
       HighlightManager.run(@copy.id)
       redirect_to :action => 'show', :id => @copy.id
     end
+  rescue Exception => e
+    logger.error "exception caught: " + e.class.to_s + " inspection: " + e.inspect + "\n" + e.backtrace.join("\n")
+    redirect_to '/'
   end
   
   def show
@@ -38,12 +41,11 @@ class CopyController < ApplicationController
     else
        redirect_to '/'
     end
-  rescue 
-    logger.error("#{self} AJAX ADD PROGRESS ERRORS ** #{$!}")
+  rescue Exception => e
+    logger.error "exception caught: " + e.class.to_s + " inspection: " + e.inspect + "\n" + e.backtrace.join("\n")
     render :update do |page|
-     session[:job_id] = nil
-     session[:job_copy_id] = nil
-     page.redirect_to( '/')
+      session[:job_id] = nil
+      page.redirect_to( '/')
     end
   end
   

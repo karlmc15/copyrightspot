@@ -4,20 +4,18 @@ require 'query_generator'
 class SearchController < ApplicationController
   
   def find 
-    logger.info "THIS IS THE BEGINING OF THE FIND METHOD FOR SEARCH ***********************"
     @search = Search.new(:url => params[:search])
-    logger.info "THIS IS BEFORE THE SAVE FOR FIND ******************"
     if @search.save
-      logger.info "THIS IS AFTER THE FIND ****************************"
       job = DiscoverJob.new(:search_id => @search.id, :status => Job::STARTING)
       job.save
       session[:job_id] = job.id
-      Workling::Remote.run(:discover_worker, :run, :job_id => job.id, :search_id => @search.id)
       render :template => '/shared/searching'
+      # run this after the render to see if we get a quicker response from passenger
+      Workling::Remote.run(:discover_worker, :run, :job_id => job.id, :search_id => @search.id)
     end
   rescue Exception => e
-    logger.info "exception caught: " + e.class.to_s + " inspection: " + e.inspect + "\n" + e.backtrace.join("\n")
-    render :text => 'AN ERROR HAPPENED :(' and return false
+    logger.error "exception caught: " + e.class.to_s + " inspection: " + e.inspect + "\n" + e.backtrace.join("\n")
+    redirect_to '/'
   end
   
   def update
@@ -37,40 +35,17 @@ class SearchController < ApplicationController
         render :text => 'still working on highlighting copies of your content ...'
       end
     end
-  rescue 
-    logger.error("#{self} AJAX ADD PROGRESS ERRORS ** #{$!}")
+  rescue Exception => e
+    logger.error "exception caught: " + e.class.to_s + " inspection: " + e.inspect + "\n" + e.backtrace.join("\n")
     render :update do |page|
-     session[:job_id] = nil
-     page.redirect_to( '/')
+      session[:job_id] = nil
+      page.redirect_to( '/')
     end
   end
   
   def show
     @search = Search.find_by_id params[:s]
     @results = @search.search_results.sort{|a,b| a.found_count<=>b.found_count}.reverse
-  end
-  
-  private
-  
-  def get_copy_sites
-    sites = []
-    queries = @search.get_queries
-    queries.each do |q|
-      search = CGI.escape("#{q} -site:#{@search.clean_url}")
-      req = "http://boss.yahooapis.com/ysearch/web/v1/#{search}?appid=R.3xNFTV34FQGQur.Ao9J17kyngB7458WBnwbpYK9BXQe4pqEGwSs.8F96tbPpkH&format=xml&count=10"
-      resp = Net::HTTP.get_response(URI.parse(req))
-      sites << parse_results(resp.body)
-    end
-    sites.flatten.uniq
-  end
-  
-  def parse_results(xml)
-    doc = Hpricot::XML xml
-    entries = []
-    (doc / '//result').each do |entry|
-      entries << entry.at('/url').inner_text
-    end
-    entries
   end
 
 end

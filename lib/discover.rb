@@ -20,6 +20,9 @@ class Discover
     pool.shutdown
     pool = nil
     save_results(@sites.flatten!, search_id)
+  rescue Exception => e
+    logger.error "exception caught: " + e.class.to_s + " inspection: " + e.inspect + "\n" + e.backtrace.join("\n")
+    raise "#{self} -- ERROR WHEN SEARCHING YAHOO :: #{e.inspect}"
   end
   
   private 
