@@ -89,23 +89,25 @@ module HtmlManager
       # setup convertion map for non-ascii characters
       map = Asciify::Mapping.new(:default)
 
-      Constants::SEARCH_TAG_SCRUB_CONFIG[:search_tags].inject([]) do |col, tag|
+      Constants::SEARCH_TAG_SCRUB_CONFIG[:search_tags].inject({}) do |col, tag|
+        # setup hash with tag key to a new array to populate with search text results
+        col[tag] = [] 
         while (tags = doc/tag).size > 0
           elem = tags.reverse.first
           elem.to_plain_text
           # remove all symbols and numbers and grab all remaining words over the length of 2
           text_list = elem.inner_text.asciify(map).downcase.gsub(/\b([^A-Za-z\s]+)\b/, ' ').scan(/[\w+]{2,}/)
-          add_to_collection(text_list, col)
+          add_to_collection(text_list, col, tag)
           # remove element from document after text is extracted
           elem.remove
         end
         col
-      end
+      end.reject{ |key, value| value.blank? }
     end
     
-    def add_to_collection(text_list, col, min = 5)
+    def add_to_collection(text_list, col, tag)
       text = text_list.join(' ')
-      col << text unless text_list.size < min or col.include?(text)
+      col[tag] << text unless text_list.size < 5 or col[tag].include?(text)
     end
     
     # Get only groups of words that are > 5

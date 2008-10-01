@@ -13,12 +13,12 @@ class DiscoverManager
 	    HtmlManager.strip_junk_tags(doc)
 	    HtmlManager.remove_junk_content(doc)
 	    # final collection of search strings with blanks removed
-	    word_array = HtmlManager.extract_text(doc)
-	    queries = QueryGenerator.search_terms(word_array.flatten.uniq)
+	    search_hash = HtmlManager.extract_text(doc)
+	    queries = QueryGenerator.search_terms(search_hash)
 	    # hammer yahoo using distributed computing and collect sites who have copied content
 	    sites = Discover.run(queries, @search.clean_url, search_id)
 	    # update database with found words and sites
-	    @search.update_attributes(:search_text => encode(word_array))
+	    @search.update_attributes(:search_text => encode(search_hash.values.flatten.uniq))
 	    @job.update_attribute(:status, Job::COMPLETE)
     rescue Exception => e
       @job.update_attributes(:status => Job::ERROR, :error => "exception caught: " + e.class.to_s + " inspection: " + e.inspect + "\n" + e.backtrace.join("\n"))
