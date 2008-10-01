@@ -1,7 +1,8 @@
 <div style="text-align:center;margin-top:25px;">
 	<% form_tag :action => 'find' do %>
 	<%= image_tag 'cspot.gif' %>
-		<p style="font-size:20px;line-height:25px;font-family:Arial;color:gray;"><strong>Discover copies of your content on the web.</strong></p>
-		<div><%= text_field_tag 'search', 'http://', :style => 'width:500px' %>	<%= submit_tag 'Search' %></div>
+		<p style="font-size:20px;font-family:Arial;color:gray;"><strong>Discover copies of your original writings on the web.</strong></p>
+		<p style="font-size:12px;font-family:Arial;color:gray;">Simply Enter the URL to a web page or blog feed that contains your writings and select Search.</p>
+		<div style="margin-top:10px;"><%= text_field_tag 'search', 'http://', :style => 'width:500px' %>	<%= submit_tag 'Search' %></div>
 	<% end %>
 </div>

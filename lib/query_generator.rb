@@ -53,7 +53,7 @@ module QueryGenerator
     # don't add word groups of less then 7 so we cut down on some of the noise 
     # from search engine results
     def add_to_collection(text, col, key)
-      min_text_size = ( %w(h1 h2 h3).include?(key) ? 7 : 10 )
+      min_text_size = ( %w(h1 h2 h3).include?(key) ? 6 : 10 )
       col << text.join(' ') unless text.size < min_text_size || col.include?(text.join(' '))
     end
     
