@@ -23,12 +23,14 @@ class HighlightManager
       # now grep through the copied site document with regex to find the copied group words
       # collect original group words so a count can be made
       found_words = Highlight.run(text, @search.get_search_text)
-      # get html from copied site and scan through it highlighting found words
-      html = HtmlManager.tidy.clean(scan_and_highlight_found_words(found_words, copy_site_html))
       # count of how many words where found that where copied
       count = found_words.inject(0){|count, fw| count += fw.size}
       # set copy results 
-      @copy.update_attributes(:found_count => count, :html => html)
+      @copy.update_attribute(:found_count, count)
+      # get html from copied site and scan through it highlighting found words
+      html = HtmlManager.tidy.clean(scan_and_highlight_found_words(found_words, copy_site_html))
+      # set navigation into html and save to file system
+      @copy.save_html(html)    
     rescue Exception => e
       puts "exception caught: " + e.class.to_s + " inspection: " + e.inspect + "\n" + e.backtrace.join("\n")
     end    
@@ -43,10 +45,12 @@ class HighlightManager
 	    sc = StringScanner.new( html )
 	    # grab everything until the body of html doc and add to html
 	    # begin searching for words in the body
-	    new_html << sc.scan_until(/<body.*?>/)
+	    body = sc.scan_until(/<body.*?>/)
+	    new_html << (body.nil? ? '' : body)
 	    found_words.each do |found_word|
 	      # scan for copied words
-	      if (text = sc.scan_until(found_word.regex))
+	      text = sc.scan_until(found_word.regex)
+	      unless text.nil?
 	        # find index of first word
 	        index = text.rindex(/(?im:\b#{found_word.first_word}\b)/, -found_word.size)	        
 	        # insert start of highlight tag

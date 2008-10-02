@@ -34,8 +34,8 @@ module HtmlManager
       end
     end
     
-    def set_head_navigation(doc, url, count, host)
-      nav = "<div style='width:100%;height:100px;text-align:center;background-color:white;padding-top:15px;'><img src='#{host}/images/cspot_small.gif'/><h4>This site has copied #{count} words from your site.</h4><p style='line-height:30px;margin-left:43%;margin-right:40%;'><a href='#{host + url}'>Return to your content discoveries</a></p></div>"
+    def set_head_navigation(doc, url, count)
+      nav = "<div style='width:100%;height:100px;text-align:center;background-color:white;padding-top:15px;'><img src='#{HOST_NAME}/images/cspot_small.gif'/><h4>This site has copied #{count} words from your site.</h4><p style='line-height:30px;margin-left:43%;margin-right:40%;'><a href='#{HOST_NAME + url}'>Return to your content discoveries</a></p></div>"
       html = doc.at('html')
       html.inner_html = (nav + html.inner_html)
     end

@@ -58,10 +58,8 @@ class SearchWords
     col
   end
   
-  # don't add word groups of less then 7 so we cut down on some of the noise 
-  # from search engine results
   def add_to_collection(text, col)
-    col << text.join(' ') unless col.include?(text.join(' '))
+    col << text.join(' ') unless text.size < 5 || col.include?(text.join(' '))
   end
   
   # this should always move the shift search_words by one and continue through words_array

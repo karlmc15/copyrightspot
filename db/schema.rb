@@ -13,8 +13,7 @@ ActiveRecord::Schema.define(:version => 20080929045433) do
 
   create_table "copies", :force => true do |t|
     t.string   "url"
-    t.text     "found_text"
-    t.text     "html"
+    t.string   "file_name"
     t.integer  "search_id"
     t.integer  "found_count"
     t.datetime "created_at"

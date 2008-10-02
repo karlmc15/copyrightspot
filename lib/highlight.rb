@@ -16,40 +16,46 @@ class Highlight
           @found_words << find_words(sw, @text)
         elsif sw.word_size >= 10 
           # break text apart until 0's are found
-          fw_list = sw.text_list.inject([]) do |fw_list, st|
-            b_dis = Agrep.calc_distance(st, @text)
-            if b_dis == 0
-              fw_list << st
-            elsif b_dis <= Agrep.threshold 
-              # shuffle through the remaing words one word at a time to see if we can grab anything left
-              # get text as word array
-              aw_list = st.split
-              base = aw_list.slice!(0,3).join(' ')
-              ft = []
-              counter = 0
-              until aw_list.empty?
-                base += " #{aw_list.shift}" unless counter == 0
-                if Agrep.calc_distance(base, @text) == 0
-                  # add current base to found text
-                  ft << base
-                else
-                  # take a word off front of base
-                  ba = base.split
-                  ba.shift
-                  base = ba.join(' ')
+          # put another thread pool around this loop
+          sub_pool = ThreadPool.new(10)
+          @sub_list = []
+          sw.text_list.each do |st|
+            sub_pool.dispatch(st) do |st|
+              b_dis = Agrep.calc_distance(st, @text)
+              if b_dis == 0
+                @sub_list << st
+              elsif b_dis <= Agrep.threshold 
+                # shuffle through the remaing words one word at a time to see if we can grab anything left
+                # get text as word array
+                aw_list = st.split
+                base = aw_list.slice!(0,3).join(' ')
+                ft = []
+                counter = 0
+                until aw_list.empty?
+                  base += " #{aw_list.shift}" unless counter == 0
+                  if Agrep.calc_distance(base, @text) == 0
+                    # add current base to found text
+                    ft << base
+                  else
+                    # take a word off front of base
+                    ba = base.split
+                    ba.shift
+                    base = ba.join(' ')
+                  end
+                  counter += 1
                 end
-                counter += 1
+                # find largest found text and add that too our found words
+                unless ft.blank?
+                  ft.sort!{|a,b|a.length<=>b.length}
+                  @sub_list << ft.pop
+                end
               end
-              # find largest found text and add that too our found words
-              unless ft.blank?
-                ft.sort!{|a,b|a.length<=>b.length}
-                fw_list << ft.pop
-              end
-            end
-            fw_list
+            end # end of sub thread pool
           end # end of search word text broken into smaller chunk loop
-          unless fw_list.blank?
-            @found_words << find_words(SearchWords.new(fw_list.join(' ')), @text)
+          sub_pool.shutdown
+          sub_pool = nil
+          unless @sub_list.blank?
+            @found_words << find_words(SearchWords.new(@sub_list.join(' ')), @text)
           end
         end # end of add found words conditional statements
       end # end of thread pool loop
