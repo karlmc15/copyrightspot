@@ -1,0 +1,3 @@
+class WebPageSearch < Search
+  
+end

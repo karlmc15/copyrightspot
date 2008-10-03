@@ -10,6 +10,9 @@ class Discover
     @sites = []
     @url = url
     queries.each do |query|
+      puts "HERE IS A QUERY WE'RE ABOUT TO RUN *************************************"
+      pp query
+      puts "\n*******************\n*************************\n"
       pool.dispatch(query) do |query|
         search = CGI.escape("#{query} -site:#{@url}")
         req = "http://boss.yahooapis.com/ysearch/web/v1/#{search}?appid=#{YAHOO_APPID}&format=xml&count=10"

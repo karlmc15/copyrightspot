@@ -33,12 +33,10 @@ class Search < ActiveRecord::Base
     host
   end
   
-  def set_found_urls(entries)
-    self.update_attribute(:found_urls, encode_result_text(entries))
-  end
-  
-  def get_found_urls
-    decode_result_text(self.found_urls)
+  def print_search_text
+    self.get_search_text.each do |text|
+      puts "#{text}\n*********************\n***********************\n"
+    end
   end
   
   private 

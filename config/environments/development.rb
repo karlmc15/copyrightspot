@@ -18,3 +18,5 @@ config.action_mailer.raise_delivery_errors = false
 
 
 HOST_NAME = 'http://localhost:3000'
+
+TIDY_PATH = '/usr/lib/libtidy.dylib'

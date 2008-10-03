@@ -1,12 +1,9 @@
-require 'asciify'
 require 'hpricot'
 
 class HighlightManager
 
   def self.run(copy_id)
     puts "#{self} - STARTED WORKER AT ********** #{Time.now}"
-    # setup convertion map for non-ascii characters
-    map = Asciify::Mapping.new(:default)
     begin
       @copy = Copy.find_by_id copy_id
       @search = Search.find_by_id @copy.search_id
@@ -19,7 +16,7 @@ class HighlightManager
       HtmlManager.remove_junk_content(c_doc)
       c_doc.to_plain_text
       # do a word scan so we have just pure text
-      text = c_doc.inner_text.asciify(map).downcase.gsub(/\b([^A-Za-z\s]+)\b/, ' ').scan(/[\w+]{2,}/).join(' ')
+      text = c_doc.inner_text.to_ascii.downcase.gsub(/\b([^A-Za-z\s]+)\b/, ' ').scan(/[\w+]{2,}/).join(' ')
       # now grep through the copied site document with regex to find the copied group words
       # collect original group words so a count can be made
       found_words = Highlight.run(text, @search.get_search_text)

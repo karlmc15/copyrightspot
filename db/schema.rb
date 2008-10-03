@@ -9,13 +9,30 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20080929045433) do
+ActiveRecord::Schema.define(:version => 20081003055828) do
 
   create_table "copies", :force => true do |t|
     t.string   "url"
     t.string   "file_name"
     t.integer  "search_id"
     t.integer  "found_count"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "feed_entries", :force => true do |t|
+    t.string   "title"
+    t.string   "summary"
+    t.string   "link"
+    t.text     "content"
+    t.integer  "feed_id"
+    t.boolean  "searched",   :default => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "feeds", :force => true do |t|
+    t.string   "url"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -43,8 +60,9 @@ ActiveRecord::Schema.define(:version => 20080929045433) do
 
   create_table "searches", :force => true do |t|
     t.string   "url"
+    t.string   "type"
+    t.integer  "feed_entry_id"
     t.text     "search_text"
-    t.text     "found_urls"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

@@ -1,8 +1,37 @@
-<div style="text-align:center;margin-top:25px;">
-	<% form_tag :action => 'find' do %>
-	<%= image_tag 'cspot.gif' %>
-		<p style="font-size:20px;font-family:Arial;color:gray;"><strong>Discover copies of your original writings on the web.</strong></p>
-		<p style="font-size:12px;font-family:Arial;color:gray;">Simply Enter the URL to a web page or blog feed that contains your writings and select Search.</p>
-		<div style="margin-top:10px;"><%= text_field_tag 'search', 'http://', :style => 'width:500px' %>	<%= submit_tag 'Search' %></div>
-	<% end %>
+<div id="content_main">
+	
+<% form_tag :action => 'find' do %>
+
+  <label for="main_search">
+    <h1>Discover copies of your original writings on the web.</h1>
+    <p>Simply Enter the URL to a web page or blog feed that contains your writings and press Search.</p>
+
+  </label>
+  
+
+  <div id="search_input" class="clearfix">
+    <form action="results.html">
+      <input type="text" class="textfield" id="main_search" name='search' value="http://" />
+      <input type="submit" class="submit_button" id="main_submit" value="Search" />
+    </form>
+  </div>
+
+<% end %>
+  
+  <div id="examples">
+    <h1>Example Searches</h1>
+
+    <a href="#">http://www.google.com/</a>
+    <a href="#">http://www.mashable.com/</a>
+    <a href="#">http://www.techcrunch.com/</a>
+  </div>
+            
+</div>
+
+<div id="content_sidebar">
+  <div id="search_tips">
+
+    <h1>Search Tips</h1>
+    <p>Sub pages that are more specific can return better results.</p>
+  </div>
 </div>

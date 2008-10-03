@@ -1,3 +1,4 @@
 log/*
 tmp/**/*
 .DS_Store
+public/copy_html/*

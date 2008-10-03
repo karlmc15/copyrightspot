@@ -1,8 +1,8 @@
 class CreateJobs < ActiveRecord::Migration
   def self.up
     create_table :jobs do |t|
-      t.string :status, :type
-      t.text :message, :error
+      t.string  :status, :type
+      t.text    :message, :error
       t.integer :search_id
       t.timestamps
     end

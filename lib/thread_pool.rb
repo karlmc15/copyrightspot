@@ -17,7 +17,6 @@ class ThreadPool
       # wait for space in the pool
       @pool_mutex.synchronize do
         while @pool.size >= @max_size
-          print "Pool is full; waiting to run #{args.join(',')}...\n"
           # Sleep until some other thread calls @pool_cv.signal
           @pool_cv.wait(@pool_mutex)
         end
@@ -26,7 +25,8 @@ class ThreadPool
       begin
         yield(*args)
       rescue => e
-        exception(self, e, *args)
+        #exception(self, e, *args)
+        puts "exception caught in thread #{thread}: " + e.class.to_s + " inspection: " + e.inspect + "\n" + e.backtrace.join("\n")
       ensure
         @pool_mutex.synchronize do
           # remove thread from current pool

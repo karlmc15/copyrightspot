@@ -1,19 +1,18 @@
-<style type="text/css" media="screen">
-	a{color:rgb(247,148,30);}
-</style>
 
-<div style="text-align:center;margin-top:20px;">
-	<%= image_tag 'cspot_small.gif' %>
-	<p>
-		<%= link_to 'back to beginning', :action => 'index' %>
-	</p>
+<div id="content_main" class="full">
+  <h1>Search Results</h1>
+
+  <ul id="results_listing">
+	<% @results.each do |result| %>
+		<li>
+	      <a href="<%= url_for({:controller => 'copy', :action => 'highlight', :s => @search.id, :url => result.url}) %>">
+
+	        <span class="result_title"><%= result.title %></span>
+	        <span class="result_summary"><%= result.abstract %></span>
+	      </a>
+	      <span class="result_url"><%= result.url %></span>
+	    </li>
+	<% end %>
+  </ul>
+
 </div>
-
-
-<br/>
-<% @results.each do |result| %>
-	<p><strong><%= link_to result.title, {:controller => 'copy', :action => 'highlight', :s => @search.id, :url => result.url} %></strong></p>
-	<p><%= result.abstract %></p>
-	<p style="color:gray;"><%= result.url %></p>
-	<p>&nbsp;</p>
-<% end %>

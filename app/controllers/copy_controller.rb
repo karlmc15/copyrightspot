@@ -1,5 +1,7 @@
 class CopyController < ApplicationController
   
+  layout 'main', :except => 'show'
+  
   def highlight
     @copy = Copy.new(:url => params[:url], :search_id => params[:s].to_i)
     if @copy.save

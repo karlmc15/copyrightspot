@@ -22,3 +22,5 @@ config.action_controller.allow_forgery_protection    = false
 config.action_mailer.delivery_method = :test
 
 HOST_NAME = 'http://copyrightspot.com:3000'
+
+TIDY_PATH = '/usr/lib/libtidy.so'

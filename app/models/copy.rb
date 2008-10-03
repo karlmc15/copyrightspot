@@ -28,7 +28,7 @@ class Copy < ActiveRecord::Base
   def set_nav_in_html(html)
     doc = Hpricot(html || '', :xhtml_strict => true)
     HtmlManager.set_html_base_url(doc, self.url)
-    HtmlManager.set_head_navigation(doc, "/search/show?s=#{self.search_id}", self.found_count)
+    HtmlManager.set_head_navigation(doc, "/search/show/#{self.search_id}", self.found_count)
     doc.to_html
   end
   

@@ -1,4 +1,5 @@
 require 'hpricot'
+require 'feed_tools'
 
 class DiscoverManager
 
@@ -8,7 +9,9 @@ class DiscoverManager
       @search = Search.find_by_id(search_id.to_i)
       @job = DiscoverJob.find_by_id(job_id.to_i)
       @job.update_attribute(:status, Job::WORKING)
-	    doc = Hpricot(HtmlManager.get_html(@search.url) || '', :xhtml_strict => true)
+      # check if we have a blog and set html accordingly
+      html = (@search.type == 'FeedEntrySearch' ? form_feed_html(@search) : HtmlManager.get_html(@search.url))
+	    doc = Hpricot( html || '', :xhtml_strict => true)
 	    raise 'document is empty' if doc.nil?
 	    HtmlManager.strip_junk_tags(doc)
 	    HtmlManager.remove_junk_content(doc)
@@ -31,6 +34,14 @@ class DiscoverManager
   
   def self.encode(array)
     Base64.encode64(array.join(','))
+  end
+  
+  def self.form_feed_html(search)
+    html = ''
+    html << "<h1>#{search.feed_entry.title}</h1>"
+    html << search.feed_entry.content
+    # make sure the html is tidy
+    HtmlManager.tidy_html(html)
   end
   
 end

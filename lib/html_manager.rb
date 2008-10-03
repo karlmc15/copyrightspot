@@ -1,7 +1,6 @@
 require 'hpricot'
 require 'hpricot_scrub'
 require 'mechanize'
-require 'asciify'
 
 module HtmlManager
   class << self
@@ -19,6 +18,10 @@ module HtmlManager
       agent.user_agent_alias = 'Linux Mozilla'
       # fix bad html and clean up tags
       tidy.clean(agent.get(url).body)
+    end
+    
+    def tidy_html(html)
+      tidy.clean(html)
     end
     
     def set_html_base_url(doc, url)
@@ -86,9 +89,6 @@ module HtmlManager
     # parse into smaller chunks of words in query generator before doing a search for them
     # or search on copied site
     def extract_text(doc)
-      # setup convertion map for non-ascii characters
-      map = Asciify::Mapping.new(:default)
-
       Constants::SEARCH_TAG_SCRUB_CONFIG[:search_tags].inject({}) do |col, tag|
         # setup hash with tag key to a new array to populate with search text results
         col[tag] = [] 
@@ -96,7 +96,7 @@ module HtmlManager
           elem = tags.reverse.first
           elem.to_plain_text
           # remove all symbols and numbers and grab all remaining words over the length of 2
-          text_list = elem.inner_text.asciify(map).downcase.gsub(/\b([^A-Za-z\s]+)\b/, ' ').scan(/[\w+]{2,}/)
+          text_list = elem.inner_text.to_ascii.downcase.gsub(/\b([^A-Za-z\s]+)\b/, ' ').scan(/[\w+]{2,}/)
           add_to_collection(text_list, col, tag)
           # remove element from document after text is extracted
           elem.remove

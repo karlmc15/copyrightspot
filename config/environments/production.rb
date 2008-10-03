@@ -22,3 +22,5 @@ config.action_view.cache_template_loading            = true
 # config.action_mailer.raise_delivery_errors = false
 
 HOST_NAME = 'http://copyrightspot.com'
+
+TIDY_PATH = '/usr/lib/libtidy.so'

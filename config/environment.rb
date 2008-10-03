@@ -74,13 +74,10 @@ require 'hpricot'
 require 'hpricot_scrub'
 require 'mechanize'
 require 'tidy'
+require 'feed_tools'
 
+require 'utilities'
 
+# initialize the Tidy library path
+Tidy.path = TIDY_PATH
 
-if RAILS_ENV == 'test'
-  # initialize the Tidy library path
-  Tidy.path = '/usr/lib/libtidy.so'
-else
-  # initialize the Tidy library path
-  Tidy.path = '/usr/lib/libtidy.dylib'
-end
