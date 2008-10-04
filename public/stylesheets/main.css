@@ -3,7 +3,7 @@ img{border:none;}
 body{color:#2c2c2c; font-size:14px; font-family:arial; padding-top:30px; background-image:url(/images/yfade.jpg); background-repeat:repeat-x;}
 h1{font-size:14px; margin-bottom:10px; font-weight:bold;}
 h2{font-size:14px; margin-bottom:10px; font-weight:bold;}
-a{color:#6D93BF;}
+a{color:#7CA6D8;}
 a:hover{color:#f7941e;}
 p{line-height:18px; margin-bottom:16px; font-family:georgia;}
 
@@ -11,11 +11,11 @@ p{line-height:18px; margin-bottom:16px; font-family:georgia;}
 #container{width:560px; background:#fff; margin:0 auto;}
 
 /*general*/
-a.feedback{font-size:10px; color:#fff; text-transform:uppercase; background-color:#6D93BF; padding:2px 5px; text-decoration:none; -webkit-border-radius:2px; -moz-border-radius:2px;}
+a.feedback{font-size:10px; color:#fff; text-transform:uppercase; background-color:#7CA6D8; padding:2px 5px; text-decoration:none; -webkit-border-radius:2px; -moz-border-radius:2px;}
 a.feedback:hover{background-color:#f7941e;}
 input.textfield{border:1px solid #d1d2d4; padding:3px;}
-input.submit_button{padding:3px; background-color:#6D93BF; border:none; color:#fff; font-family:arial; text-transform:uppercase; font-weight:bold; cursor:pointer; -webkit-border-radius:3px; -moz-border-radius:3px;}
-input.submit_button:hover{background-color:#f7941e;}
+input.submit_button{padding:3px; background-color:#f7941e; border:none; color:#fff; font-family:arial; text-transform:uppercase; font-weight:bold; cursor:pointer; -webkit-border-radius:3px; -moz-border-radius:3px;}
+input.submit_button:hover{background-color:#7CA6D8;}
 
 /* header */
 #header{ border-bottom:1px solid #d1d2d4; padding-bottom:10px; position:relative; margin-bottom:30px;}
@@ -35,10 +35,10 @@ input.submit_button:hover{background-color:#f7941e;}
 
 /* main search bar */
 #search_input{margin-bottom:20px; width:560px;}
-#main_search{padding:5px; border:2px solid #6D93BF; outline:none; font-size:14px; width:465px; font-family:georgia; float:left;}
-#main_search:focus{border-color:#f7941e;}
+#main_search{padding:5px; border:2px solid #CCC9C6; outline:none; font-size:14px; width:465px; font-family:georgia; float:left;}
+#main_search:focus{border-color:#7CA6D8;}
 #main_submit{float:right; width:70px; height:30px; }
-#main_submit:hover{background:#f7941e;}
+#main_submit:hover{background:#7CA6D8;}
 
 /*sidebar*/
 #content_sidebar{font-size:11px; color:#656565;}
