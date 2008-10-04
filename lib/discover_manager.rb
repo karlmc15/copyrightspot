@@ -10,7 +10,7 @@ class DiscoverManager
       @job = DiscoverJob.find_by_id(job_id.to_i)
       @job.update_attribute(:status, Job::WORKING)
       # check if we have a blog and set html accordingly
-      html = (@search.type == 'FeedEntrySearch' ? form_feed_html(@search) : HtmlManager.get_html(@search.url))
+      html = (@search.class == FeedEntrySearch ? form_feed_html(@search) : HtmlManager.get_html(@search.url))
 	    doc = Hpricot( html || '', :xhtml_strict => true)
 	    raise 'document is empty' if doc.nil?
 	    HtmlManager.strip_junk_tags(doc)

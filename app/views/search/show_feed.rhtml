@@ -1,0 +1,20 @@
+
+<div id="content_main" class="full">
+  <h1>Select a blog entry of yours to Search for reuse.</h1>
+
+  <ul id="results_listing">
+	<% @feed_entries.each do |entry| %>
+		<li>
+	      <a href="<%= url_for({:action => 'show_entry', :id => entry.id}) %>">
+
+	        <span class="result_title"><%= h entry.title %></span>
+	        <span class="result_summary"><%= h entry.clean_abstract.to_ascii %></span>
+	      </a>
+	      <span class="result_url"><%= h entry.link %></span>
+	    </li>
+	<% end %>
+  </ul>
+
+<%= will_paginate @feed_entries %>
+
+</div>

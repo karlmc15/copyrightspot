@@ -1,4 +1,7 @@
 
+<% if @search.class == FeedEntrySearch %>
+	<div style="margin: 10px 0px; text-align:center;"><%= link_to 'Return to your Feed Entries', :action => 'show_feed', :id => @search.feed_entry.feed_id %></div>
+<% end %>
 <div id="content_main" class="full">
   <h1>Search Results</h1>
 
@@ -15,4 +18,6 @@
 	<% end %>
   </ul>
 
+	<%= will_paginate @results %>
+	
 </div>

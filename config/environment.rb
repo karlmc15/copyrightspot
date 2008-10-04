@@ -75,6 +75,7 @@ require 'hpricot_scrub'
 require 'mechanize'
 require 'tidy'
 require 'feed_tools'
+require 'will_paginate'
 
 require 'utilities'
 

@@ -1,4 +1,36 @@
-<%= javascript_include_tag :defaults %>
+<h2><%= @message || '' %> ...</h2>
 
-<h2>Searching ...</h2>
-<%= periodically_call_remote(:url => {:action => 'update'}, :frequency => '2') %>
+<script type="text/javascript" charset="utf-8">
+	var pe;
+	
+	function startUpdater(){
+		pe = new PeriodicalExecuter(function() 
+				{new Ajax.Request('<%= @update_url %>', 
+				{asynchronous:true, evalScripts:true})}, 2);	
+	}
+	
+	function stopUpdater(){
+		pe.stop();
+	}
+
+	//need ta pause on calling this so element is visible
+	function setFocus(field){
+		Field.focus(field);
+	}
+	
+	function processSingleTask(){
+		new Ajax.Request('<%= @update_url %>', {asynchronous:true, evalScripts:true});
+	}
+	
+	// on window load initalizer
+	// Initially set everything up
+	init = function (){ 
+		<% if @update_url =~ /feed/ %>
+			processSingleTask();
+		<% else %>
+			startUpdater();
+		<% end %>
+	} // Attach the onload function 
+	Event.observe(window, 'load', init, false);
+	
+</script>
