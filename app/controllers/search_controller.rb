@@ -13,7 +13,7 @@ class SearchController < ApplicationController
       feed = Feed.new(:url => params[:search])
       if feed.save
         session[:populate_feed] = feed.id
-        @message = 'Give me a couple seconds while I grab your blog feed'
+        @message = 'Give me a minute while I grab your blog feed'
         @update_url = url_for(:action => 'feed_progress')
         render :template => '/shared/searching'
       end
