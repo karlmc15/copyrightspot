@@ -50,6 +50,9 @@ input.submit_button:hover{background-color:#6D93BF;}
 #content_sidebar ul#sidebar_modules li{ margin-bottom:10px; border-bottom:1px solid #d1d2d4; padding-bottom:5px;}
 #content_sidebar ul#sidebar_modules li.last{ border-bottom:none;}
 
+/*results*/
+div#loading_results{color:#6D93BF; font-size:18px;}
+div#loading_results img{position:relative; top:2px;}
 
 /*home*/
 #search_tips{}
