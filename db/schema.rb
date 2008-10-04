@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20081003055828) do
+ActiveRecord::Schema.define(:version => 20081004230619) do
 
   create_table "copies", :force => true do |t|
     t.string   "url"
@@ -43,6 +43,14 @@ ActiveRecord::Schema.define(:version => 20081003055828) do
     t.text     "message"
     t.text     "error"
     t.integer  "search_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "notifies", :force => true do |t|
+    t.string   "email"
+    t.string   "page"
+    t.boolean  "notified",   :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

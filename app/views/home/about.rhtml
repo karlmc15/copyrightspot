@@ -9,9 +9,13 @@
   <div id="email_signup">
     <h1>Stay in the loop</h1>
     <p>CopyrightSpot would love to keep your posted on the latest developments.</p>
-    <p><input type="text" class="textfield" value="your email" /></p>
-    <p><input type="submit" class="submit_button" value="Yes! Keep me informed." /></p>
-
-    <p><small>we never share your email</small></p>
+	<% form_remote_tag :url => '/home/notify' do -%>
+		<div id='opt_in_fields'>    
+			<p><input id='email_input' type="text" class="textfield" value="your email" name='notify_email'/></p>
+	 		<%= hidden_field_tag 'page', 'about' %>
+    		<p><input type="submit" class="submit_button" value="Yes! Keep me informed." /></p>
+			<p><small>we never share your email</small></p>
+		</div>
+	<% end -%>
   </div>
 </div>

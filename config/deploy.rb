@@ -52,4 +52,27 @@ namespace :deploy do
     task t, :roles => :app do ; end
   end
   
+  namespace :web do
+    
+    desc "Custom deploy:web:disable task"
+    task :disable, :roles => :web, :except => { :no_release => true } do
+      require 'erb'
+      on_rollback { run "rm #{shared_path}/system/maintenance.html" }
+
+      reason = ENV['REASON']
+      deadline = ENV['UNTIL']
+
+      template =    File.read("./app/views/layouts/maintenance.rhtml")
+      result =    ERB.new(template).result(binding)
+
+      put result,     "#{shared_path}/system/maintenance.html", :mode => 0644
+    end
+    
+    desc "Custom deploy:web:enable task"
+    task :enable, :roles => :web, :except => { :no_release => true } do
+      run "rm #{shared_path}/system/maintenance.html"
+    end
+    
+  end
+  
 end
