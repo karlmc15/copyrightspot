@@ -1,7 +1,7 @@
 class CreateNotifies < ActiveRecord::Migration
   def self.up
     create_table :notifies do |t|
-      t.string  :email, :page
+      t.string  'email', 'page'
       t.boolean :notified, :default => false
       t.timestamps
     end
