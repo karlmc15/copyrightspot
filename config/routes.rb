@@ -36,7 +36,7 @@ ActionController::Routing::Routes.draw do |map|
   
   # catch any requests to the maintenance page when it has been removed yet user 
   # still has page up and hits refresh
-  map.connect "/system/maintenance.html", ''
+  map.connect "/system/maintenance.html", :controller => 'search'
      
   # See how all your routes lay out with "rake routes"
 
