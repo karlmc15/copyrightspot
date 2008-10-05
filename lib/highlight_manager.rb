@@ -3,7 +3,6 @@ require 'hpricot'
 class HighlightManager
 
   def self.run(copy_id)
-    puts "#{self} - STARTED WORKER AT ********** #{Time.now}"
     begin
       @copy = Copy.find_by_id copy_id
       @search = Search.find_by_id @copy.search_id
@@ -29,9 +28,8 @@ class HighlightManager
       # set navigation into html and save to file system
       @copy.save_html(html)    
     rescue Exception => e
-      puts "exception caught: " + e.class.to_s + " inspection: " + e.inspect + "\n" + e.backtrace.join("\n")
+      puts "#{self} -- exception caught: " + e.class.to_s + " inspection: " + e.inspect + "\n" + e.backtrace.join("\n")
     end    
-    puts "#{self} - ENDED WORKER AT ********** #{Time.now}"
   end
   
   private
@@ -44,6 +42,7 @@ class HighlightManager
 	    # begin searching for words in the body
 	    body = sc.scan_until(/<body.*?>/)
 	    new_html << (body.nil? ? '' : body)
+	    first_match_found = false
 	    found_words.each do |found_word|
 	      # scan for copied words
 	      text = sc.scan_until(found_word.regex)
@@ -52,7 +51,12 @@ class HighlightManager
 	        index = text.rindex(/(?im:\b#{found_word.first_word}\b)/, -found_word.size)	        
 	        # insert start of highlight tag
 	        offset = ((index - 1) - text.length) # subtract 1 from index so that tag goes before first character
-	        text.insert(offset, "<strong style='background-color: #FAD089;'>")
+	        anchor_tag = ''
+	        unless first_match_found
+	          anchor_tag << "<a name='first_word'></a>"
+	          first_match_found = true
+          end
+	        text.insert(offset, "#{anchor_tag}<strong style='background-color: #f7941e;'>")
 	        # add the close tag to found words
 	        text << '</strong>'
 	        new_html << text       

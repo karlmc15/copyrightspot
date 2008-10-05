@@ -10,9 +10,6 @@ class Discover
     @sites = []
     @url = url
     queries.each do |query|
-      puts "HERE IS A QUERY WE'RE ABOUT TO RUN *************************************"
-      pp query
-      puts "\n*******************\n*************************\n"
       pool.dispatch(query) do |query|
         search = CGI.escape("#{query} -site:#{@url}")
         req = "http://boss.yahooapis.com/ysearch/web/v1/#{search}?appid=#{YAHOO_APPID}&format=xml&count=10"
@@ -24,7 +21,7 @@ class Discover
     pool = nil
     save_results(@sites.flatten!, search_id)
   rescue Exception => e
-    puts "exception caught: " + e.class.to_s + " inspection: " + e.inspect + "\n" + e.backtrace.join("\n")
+    puts "#{self} -- exception caught: " + e.class.to_s + " inspection: " + e.inspect + "\n" + e.backtrace.join("\n")
     raise "#{self} -- ERROR WHEN SEARCHING YAHOO :: #{e.inspect}"
   end
   

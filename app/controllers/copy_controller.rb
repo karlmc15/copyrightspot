@@ -1,6 +1,6 @@
 class CopyController < ApplicationController
   
-  layout 'main', :except => 'show'
+  layout 'main', :except => [:show, :nav]
   
   def highlight
     @copy = Copy.new(:url => params[:url], :search_id => params[:s].to_i)
@@ -14,6 +14,10 @@ class CopyController < ApplicationController
   end
   
   def show
+    @copy = Copy.find_by_id params[:id].to_i
+  end
+  
+  def nav
     @copy = Copy.find_by_id params[:id].to_i
   end
   

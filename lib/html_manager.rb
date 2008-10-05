@@ -37,10 +37,15 @@ module HtmlManager
       end
     end
     
-    def set_head_navigation(doc, url, count)
-      nav = "<div style='width:100%;height:100px;text-align:center;background-color:white;padding-top:15px;'><img src='#{HOST_NAME}/images/cspot_small.gif'/><h4>This site has copied #{count} words from your site.</h4><p style='line-height:30px;margin-left:43%;margin-right:40%;'><a href='#{HOST_NAME + url}'>Return to your content discoveries</a></p></div>"
-      html = doc.at('html')
-      html.inner_html = (nav + html.inner_html)
+    def set_head_navigation(doc, copy_id)
+      #nav = "<div style='width:100%;height:100px;text-align:center;background-color:white;padding-top:15px;'><img src='#{HOST_NAME}/images/cspot_small.gif'/><h4>This site has copied #{count} words from your site.</h4><p style='line-height:30px;margin-left:43%;margin-right:40%;'><a href='#{HOST_NAME + url}'>Return to your content discoveries</a></p></div>"
+      iframe = <<-EOF
+        <iframe src='#{HOST_NAME}/copy/nav/#{copy_id}' width='100%' height='200' frameborder=0 scrolling=no>
+          It appears your browser is unable to process iframes to show CopyrightSpot's navigation.
+        </iframe>
+      EOF
+      html = doc.at('body')
+      html.inner_html = (iframe + html.inner_html)
     end
     
     def get_host(url)

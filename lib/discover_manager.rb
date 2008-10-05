@@ -4,7 +4,6 @@ require 'feed_tools'
 class DiscoverManager
 
   def self.run(search_id, job_id)
-    puts "#{self} - STARTED WORKER AT ********** #{Time.now} || #{search_id}"
     begin
       @search = Search.find_by_id(search_id.to_i)
       @job = DiscoverJob.find_by_id(job_id.to_i)
@@ -25,9 +24,8 @@ class DiscoverManager
 	    @job.update_attribute(:status, Job::COMPLETE)
     rescue Exception => e
       @job.update_attributes(:status => Job::ERROR, :error => "exception caught: " + e.class.to_s + " inspection: " + e.inspect + "\n" + e.backtrace.join("\n"))
-      puts "exception caught: " + e.class.to_s + " inspection: " + e.inspect + "\n" + e.backtrace.join("\n")
+      puts "#{self} -- exception caught: " + e.class.to_s + " inspection: " + e.inspect + "\n" + e.backtrace.join("\n")
     end    
-    puts "#{self} - ENDED WORKER AT ********** #{Time.now}"
   end
   
   private 

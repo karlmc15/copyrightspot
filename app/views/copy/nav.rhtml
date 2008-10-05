@@ -1,0 +1,34 @@
+<% 
+	search_url 		= HOST_NAME + url_for(:controller => 'search', :action => 'show', :id => @copy.search_id)
+	first_word_url = HOST_NAME + url_for(:controller => 'copy', :action => 'show', :id => @copy.id) + '#first_word'
+	original_url 	= Search.find_by_id(@copy.search_id).url
+ %>
+
+<html>
+<%= stylesheet_link_tag 'main' %>
+<body id="highlight_page">
+	
+	<div id="container">
+		<a href="home.html"><img src="/images/cspot_dark.gif" width="322" height="50" alt="CopyrightSpot"></a>
+		<p id="results_summary"><a href="<%= @copy.url %>" target="_blank">This site</a> reused <span class="shared_quantity"><%= @copy.found_count %></span> words of <a href="<%= original_url %>" target="_blank">yours</a>.</p>
+		<div id="actions" class="clearfix">
+			<div class="button"><a href="#" class="button" onclick="navigate('<%= first_word_url %>')">Go to the first copied word</a></div>
+
+			<div class="button"><a href="#" class="button" onclick="navigate('<%= search_url %>'); return false;" >Back to search results</a></div>
+			<div class="button"><a href="<%= @copy.url %>" class="button last" target="_blank" >View this site in context</a></div>
+		</div>
+	</div>
+	
+	<script type="text/javascript" charset="utf-8">
+	
+		function navigate(url){
+			top.location.href = url;
+		}
+		
+	</script>
+	
+</body>
+</html>
+
+
+  
