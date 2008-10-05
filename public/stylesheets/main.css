@@ -21,7 +21,8 @@ input.submit_button:hover{background-color:#6D93BF;}
 #header{ border-bottom:1px solid #d1d2d4; padding-bottom:10px; position:relative; margin-bottom:30px;}
 #nav{font-size:12px; font-weight:bold; text-align:right; width:200px; position:absolute; bottom:18px; right:0;}
 #nav a{margin-left:15px; text-decoration:none;}
-#nav a.active{color:#2c2c2c; text-decoration:none; cursor:default;}
+#nav a.active{color:#CCC9C6; text-decoration:none; cursor:default;}
+
 
 /* content */
 #content_area{}
