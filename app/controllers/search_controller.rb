@@ -39,7 +39,7 @@ class SearchController < ApplicationController
         if feed.feed_entries.blank?
           entries = FeedTools::Feed.open(feed.url).entries
           entries.each do |entry|
-            feed_entry = FeedEntry.new(:title => entry.title, :summary => entry.summary, :link => entry.link, :content => entry.content, :feed_id => feed.id)
+            feed_entry = FeedEntry.new(:title => entry.title, :summary => entry.summary, :link => entry.link, :content => entry.content, :published => entry.published, :feed_id => feed.id)
             feed_entry.save
           end
         end
@@ -52,7 +52,7 @@ class SearchController < ApplicationController
     logger.error "exception caught: " + e.class.to_s + " inspection: " + e.inspect + "\n" + e.backtrace.join("\n")
     render :update do |page|
       session[:populate_feed] = nil
-      page.redirect_to( '/')
+      page.redirect_to '/'
     end
   end
   
@@ -92,7 +92,7 @@ class SearchController < ApplicationController
     render :update do |page|
       session[:job_id] = nil
       session[:start_search] = nil
-      page.redirect_to( '/')
+      page.redirect_to '/'
     end
   end
   

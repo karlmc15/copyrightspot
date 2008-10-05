@@ -1,16 +1,14 @@
 
 <div id="content_main" class="full">
   <h1>Blog Entries for <%= @feed.url %></h1>
-
-	<p>Select a blog entry you’d like to search with.</p>
-  <ul id="results_listing">
+	<p class="feed_instructions">Choose the entry you’d like to search with</p>
+  <ul id="results_listing" class="feed">
 	<% @feed_entries.each do |entry| %>
 		<li>
 	      <a href="<%= url_for({:action => 'show_entry', :id => entry.id}) %>">
-
-	        <span class="result_title"><%= h entry.title %></span>
-	        <span class="result_summary"><%= h entry.clean_abstract.to_ascii %></span>
-	      </a>
+	        <span class="result_title"><%= h entry.title %> <span class="result_date">posted: <%= entry.published %></span> </span>
+				<div class="arrow">&raquo;</div>
+			</a>
 	      <span class="result_url"><%= h entry.link %></span>
 	    </li>
 	<% end %>
@@ -19,3 +17,4 @@
 <%= will_paginate @feed_entries %>
 
 </div>
+

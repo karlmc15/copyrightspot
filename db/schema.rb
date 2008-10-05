@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20081004230619) do
+ActiveRecord::Schema.define(:version => 20081005205955) do
 
   create_table "copies", :force => true do |t|
     t.string   "url"
@@ -29,6 +29,7 @@ ActiveRecord::Schema.define(:version => 20081004230619) do
     t.boolean  "searched",   :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "published"
   end
 
   create_table "feeds", :force => true do |t|

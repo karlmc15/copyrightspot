@@ -1,0 +1,38 @@
+
+<div id="content_sidebar">
+  <ul id="sidebar_modules" class="home">
+	
+    <li id="search_tips">
+      <h1>Search Tips</h1>
+      <p>Sub pages that are more specific can return better results.</p>
+		<p style="margin-top:10px;">Use your blog feed URL for a more focused search.</p>
+    </li>
+    <li id="examples" class="last">
+      <h1>Search Examples</h1>
+      <a href="#">Web Page Search</a>
+      <a href="#">Blog Feed Search</a>
+    </li>
+
+  </ul>
+</div>
+
+<div id="content_main">
+	
+<% form_tag :controller => 'search', :action => 'find' do %>
+
+  <label for="main_search">
+    <h1>Discover copies of your original writings on the web.</h1>
+    <p>Simply Enter the URL to a web page or blog feed that contains your writings and press Search.</p>
+
+  </label>
+  
+
+  <div id="search_input" class="clearfix">
+      <input type="text" class="textfield" id="main_search" name='search' value="http://" />
+      <input type="submit" class="submit_button" id="main_submit" value="Search" />
+  </div>
+
+<% end %>
+
+            
+</div>
