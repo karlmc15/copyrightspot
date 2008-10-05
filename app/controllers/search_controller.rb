@@ -115,7 +115,8 @@ class SearchController < ApplicationController
   end
   
   def show_feed
-    @feed_entries = FeedEntry.paginate_by_feed_id(params[:id].to_i, :page => params[:page], :per_page => 10, :order => 'updated_at DESC')
+    @feed = Feed.find_by_id params[:id].to_i
+    @feed_entries = FeedEntry.paginate_by_feed_id(@feed.id, :page => params[:page], :per_page => 10, :order => 'updated_at DESC')
   end
   
   def show

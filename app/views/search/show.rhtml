@@ -2,8 +2,18 @@
 <% if @search.class == FeedEntrySearch %>
 	<div style="margin: 10px 0px; text-align:center;"><%= link_to 'Return to your Feed Entries', :action => 'show_feed', :id => @search.feed_entry.feed_id %></div>
 <% end %>
+
+<% form_tag :controller => 'search', :action => 'find' do %>
+	<div id="search_input" class="clearfix">
+	    <input type="text" class="textfield" id="main_search" name='search' value="<%= @search.url %>" />
+	    <input type="submit" class="submit_button" id="main_submit" value="Search" />
+	</div>
+<% end %>
+
 <div id="content_main" class="full">
   <h1>Search Results</h1>
+
+	<p>Select a result to highlight your copied writings.</p>
 
   <ul id="results_listing">
 	<% @results.each do |result| %>
