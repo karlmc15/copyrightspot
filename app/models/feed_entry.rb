@@ -12,4 +12,9 @@ class FeedEntry < ActiveRecord::Base
     (abs.length > 100 ? "#{abs[0..100]}..." : abs)
   end
   
+  def clean_published
+    t = Time.parse self.published
+    t.strftime "%m/%d/%Y"
+  end
+  
 end

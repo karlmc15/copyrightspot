@@ -5,7 +5,7 @@ h1{font-size:14px; margin-bottom:10px; font-weight:bold;}
 h2{font-size:14px; margin-bottom:10px; font-weight:bold;}
 a{color:#6D93BF;}
 a:hover{color:#f7941e;}
-p{line-height:18px; margin-bottom:16px; font-family:georgia;}
+p{line-height:19px; margin-bottom:16px; font-family:georgia;}
 
 #paper{padding:20px; width:580px; background-color:#fff; margin:0 auto; -webkit-border-radius:10px; -moz-border-radius:10px;}
 #container{width:560px; background:#fff; margin:0 auto;}
@@ -14,7 +14,8 @@ p{line-height:18px; margin-bottom:16px; font-family:georgia;}
 a.feedback{font-size:10px; color:#fff; text-transform:uppercase; background-color:#f7941e; padding:2px 5px; text-decoration:none; -webkit-border-radius:2px; -moz-border-radius:2px;}
 a.feedback:hover{background-color:#6D93BF;}
 input.textfield{border:1px solid #d1d2d4; padding:3px;}
-input.submit_button{padding:3px; background-color:#f7941e; border:none; color:#fff; font-family:arial; text-transform:uppercase; font-weight:bold; cursor:pointer; -webkit-border-radius:3px; -moz-border-radius:3px;}
+input.submit_button{font-size:11px; padding:3px; background-color:#f7941e; border:none; color:#fff; font-family:arial; text-transform:uppercase; font-weight:bold; cursor:pointer; -webkit-border-radius:3px; -moz-border-radius:3px;}
+html>body input.submit_button, * html input.submit_button{width:156px;}
 input.submit_button:hover{background-color:#6D93BF;}
 a.button{display:block; width:170px; font-size:11px; text-align:center; text-decoration:none; color:#fff; background-color:#f7941e; padding:5px; -webkit-border-radius:5px; -moz-border-radius:5px;}
 a.button:hover{background-color:#6D93BF;}
@@ -22,7 +23,8 @@ a.button:hover{background-color:#6D93BF;}
 
 /* header */
 #header{ border-bottom:1px solid #d1d2d4; padding-bottom:10px; position:relative; margin-bottom:30px;}
-#nav{font-size:12px; font-weight:bold; text-align:right; width:200px; position:absolute; bottom:18px; right:0;}
+#logo{float:left;}
+#nav{font-size:12px; font-weight:bold; text-align:right; width:200px; float:right; margin-top:20px;}
 #nav a{margin-left:15px; text-decoration:none;}
 #nav a.active{color:#CCC9C6; text-decoration:none; cursor:default;}
 
@@ -53,6 +55,7 @@ a.button:hover{background-color:#6D93BF;}
 #content_sidebar ul#sidebar_modules{list-style-type:none;}
 #content_sidebar ul#sidebar_modules li{ margin-bottom:10px; border-bottom:1px solid #d1d2d4; padding-bottom:5px;}
 #content_sidebar ul#sidebar_modules li.last{ border-bottom:none;}
+#content_sidebar p{line-height:18px;}
 
 
 /*home*/
@@ -65,7 +68,7 @@ div#loading_results img{position:relative; top:2px;}
 
 ul#results_listing{list-style-type:none;}
 ul#results_listing li{ margin-bottom:10px;}
-ul#results_listing li a{display:block; text-decoration:none; color:#2c2c2c; padding:10px; padding-bottom:20px; margin-left:-10px; -webkit-border-radius:5px; -moz-border-radius:5px;}
+ul#results_listing li a{cursor:pointer; display:block; text-decoration:none; color:#2c2c2c; padding:10px; padding-bottom:20px; margin-left:-10px; -webkit-border-radius:5px; -moz-border-radius:5px;}
 ul#results_listing li a:hover{background-color:#FFEDC8;}
 ul#results_listing li a span.result_title{font-weight:bold; margin-bottom:5px; display:block; color:#6D93BF; font-size:14px;}
 ul#results_listing li a span.result_summary{font-size:11px; width:380px; color:#2c2c2c; display:block; margin-bottom:5px; font-family:georgia; line-height:14px;}
@@ -94,18 +97,17 @@ p#results_summary{font-size:18px; margin-top:25px; margin-bottom:30px;}
 
 
 /* hacks */
-.clearfix:after {
+.clearfix:after, #header:after {
 	content:".";
 	display:block;
 	height:0;
 	clear:both;
 	visibility:hidden;
 }
-.clearfix {display:inline-block;}
+.clearfix, #header {display:inline-block;}
 /* Hide from IE Mac \*/
-	.clearfix {display:block;}
+	.clearfix, #header {display:block;}
 /* End hide from IE Mac */
-
 
 
 

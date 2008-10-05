@@ -6,7 +6,7 @@
 	<% @feed_entries.each do |entry| %>
 		<li>
 	      <a href="<%= url_for({:action => 'show_entry', :id => entry.id}) %>">
-	        <span class="result_title"><%= h entry.title %> <span class="result_date">posted: <%= entry.published %></span> </span>
+	        <span class="result_title"><%= h entry.title %> <span class="result_date">posted: <%= entry.clean_published %></span> </span>
 				<div class="arrow">&raquo;</div>
 			</a>
 	      <span class="result_url"><%= h entry.link %></span>
