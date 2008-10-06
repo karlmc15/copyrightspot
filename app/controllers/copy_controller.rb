@@ -3,11 +3,18 @@ class CopyController < ApplicationController
   layout 'main', :except => [:show, :nav]
   
   def highlight
-    @copy = Copy.new(:url => params[:url], :search_id => params[:s].to_i)
-    if @copy.save
-      HighlightManager.run(@copy.id)
-      redirect_to :action => 'show', :id => @copy.id
+    # first see if copy exists 
+    @copy = Copy.find_by_search_result_id(params[:sr].to_i)
+    if @copy.nil?
+      @copy = Copy.new(:url => params[:url], :search_id => params[:s].to_i, :search_result_id => params[:sr].to_i)
+      if @copy.save
+        HighlightManager.run(@copy.id)
+        # update that the search result has been searched
+        sr = SearchResult.find_by_id(params[:sr].to_i)
+        sr.update_attribute(:searched, true)
+      end
     end
+    redirect_to :action => 'show', :id => @copy.id
   rescue Exception => e
     logger.error "exception caught: " + e.class.to_s + " inspection: " + e.inspect + "\n" + e.backtrace.join("\n")
     redirect_to '/'

@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20081005205955) do
+ActiveRecord::Schema.define(:version => 20081006015152) do
 
   create_table "copies", :force => true do |t|
     t.string   "url"
@@ -18,6 +18,7 @@ ActiveRecord::Schema.define(:version => 20081005205955) do
     t.integer  "found_count"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "search_result_id"
   end
 
   create_table "feed_entries", :force => true do |t|
@@ -65,6 +66,7 @@ ActiveRecord::Schema.define(:version => 20081005205955) do
     t.integer  "found_count", :default => 1
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "searched",    :default => false
   end
 
   create_table "searches", :force => true do |t|

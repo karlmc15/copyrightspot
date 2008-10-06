@@ -9,7 +9,7 @@
 <body id="highlight_page">
 	
 	<div id="container">
-		<a href="<%= HOST_NAME %>"><img src="/images/cspot_dark.gif" width="322" height="50" alt="CopyrightSpot"></a>
+		<a href="#" onclick="navigate('<%= HOST_NAME %>'); return false;"><img src="/images/cspot_dark.gif" width="322" height="50" alt="CopyrightSpot"></a>
 		<% if @copy.found_count > 0 %>
 		<p id="results_summary"><a href="<%= @copy.url %>" target="_blank">This site</a> reused <span class="shared_quantity"><%= @copy.found_count %></span> words of <a href="<%= original_url %>" target="_blank">yours</a>.</p>
 		<% else %>

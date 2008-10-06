@@ -75,7 +75,7 @@ ul#results_listing li a span.result_summary{font-size:11px; width:380px; color:#
 ul#results_listing li a:hover span.result_url{color:#7E612A;}
 ul#results_listing li span.result_url{color:#f7941e; font-style:italic; display:block; font-size:11px; position:relative; top:-20px;}
 
-ul#results_listing li.visited a span.result_title{color:#A8C5E5;}
+ul#results_listing li.visited a span.result_title{color:#CCC9C6;}
 ul#results_listing li.visited a:hover span.result_title{color:#6D93BF;}
 
 

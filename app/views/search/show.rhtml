@@ -10,24 +10,26 @@
 	</div>
 <% end %>
 
-<div id="content_main" class="full">
-  <h1>Search Results</h1>
+<% if @results.blank? %>
+	<h1>No reuse was found for that page.</h1>
 
-	<p>Select a result to highlight your copied writings.</p>
+<% else %>
+	  <h1>Search Results</h1>
 
-  <ul id="results_listing">
-	<% @results.each do |result| %>
-		<li>
-	      <a href="<%= url_for({:controller => 'copy', :action => 'highlight', :s => @search.id, :url => result.url}) %>">
+		<p>Select a result to highlight your copied writings.</p>
 
-	        <span class="result_title"><%= result.title %></span>
-	        <span class="result_summary"><%= result.abstract %></span>
-	      </a>
-	      <span class="result_url"><%= result.url %></span>
-	    </li>
-	<% end %>
-  </ul>
+	  <ul id="results_listing">
+		<% @results.each do |result| %>
+			<li class="<%= 'visited' if result.searched %>">
+		      <a href="<%= url_for({:controller => 'copy', :action => 'highlight', :s => @search.id, :url => result.url, :sr => result.id}) %>">
 
-	<%= will_paginate @results %>
-	
-</div>
+		        <span class="result_title"><%= result.title %></span>
+		        <span class="result_summary"><%= result.abstract %></span>
+		      </a>
+		      <span class="result_url"><%= result.url %></span>
+		    </li>
+		<% end %>
+	  </ul>
+
+		<%= will_paginate @results %>
+<% end %>

@@ -1,6 +1,7 @@
 require 'hpricot'
 require 'hpricot_scrub'
 require 'mechanize'
+require 'timeout'
 
 module HtmlManager
   class << self
@@ -15,6 +16,7 @@ module HtmlManager
 
     def get_html(url)
       agent = WWW::Mechanize.new
+      agent.read_timeout = 30
       agent.user_agent_alias = 'Linux Mozilla'
       # fix bad html and clean up tags
       tidy.clean(agent.get(url).body)

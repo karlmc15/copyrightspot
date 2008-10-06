@@ -67,7 +67,6 @@ class HighlightManager
     rescue Exception => e
       puts "exception caught: " + e.class.to_s + " inspection: " + e.inspect + "\n" + e.backtrace.join("\n")
     end
-
   end
   
 end

@@ -80,8 +80,9 @@ class Highlight
     # scan to see how many results there are
     index = 0
     next_index = 0
-    regex = search_word.match_regex
-    index_list = text.scan(regex).inject([]) do |list, result|
+    # use the text and not a regex becuase we found exact sentences with levensthein 
+    regex = search_word.match_text
+    index_list = text.scan(/#{regex}/).inject([]) do |list, result|
       begin_index = @text[next_index, (@text.length)].index(regex)
       if begin_index
         # now look for index in smaller chunk
@@ -98,6 +99,7 @@ class Highlight
       end
       list
     end.collect{|index| FoundWords.new(search_word.to_s, index)}
+    index_list
   end 
  
   def self.ensure_unique(found_words_list)

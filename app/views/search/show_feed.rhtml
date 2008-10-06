@@ -4,7 +4,7 @@
 	<p class="feed_instructions">Choose the entry you’d like to search with</p>
   <ul id="results_listing" class="feed">
 	<% @feed_entries.each do |entry| %>
-		<li>
+		<li class="<%= 'visited' if entry.searched %>">
 	      <a href="<%= url_for({:action => 'show_entry', :id => entry.id}) %>">
 	        <span class="result_title"><%= h entry.title %> <span class="result_date">posted: <%= entry.clean_published %></span> </span>
 				<div class="arrow">&raquo;</div>

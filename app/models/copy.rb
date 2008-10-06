@@ -1,9 +1,10 @@
 require 'fileutils'
 
 class Copy < ActiveRecord::Base
-  has_one   :search
-  has_many  :highlight_jobs, :dependent => :destroy
-  
+
+  belongs_to :search_result
+  belongs_to   :search
+
   before_create :create_file_name
   
   BASE_DIR = File.join(RAILS_ROOT, 'public', 'copy_html')
