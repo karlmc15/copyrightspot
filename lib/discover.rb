@@ -28,10 +28,12 @@ class Discover
   private 
   
   def self.save_results(results, search_id)
-    ensure_results_unique(results).each do |result|
-      result.search_id = search_id
-      result.save
-    end  
+    unless results.blank?
+      ensure_results_unique(results).each do |result|
+        result.search_id = search_id
+        result.save
+      end  
+    end
   end
   
   def self.parse_results(xml)
