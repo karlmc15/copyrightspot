@@ -3,7 +3,7 @@ require 'hpricot'
 
 class Discover
   
-  YAHOO_APPID = "R.3xNFTV34FQGQur.Ao9J17kyngB7458WBnwbpYK9BXQe4pqEGwSs.8F96tbPpkH"
+  YAHOO_APPID = "y_UjZJ7V34HtVixluMcJ_JsCZkdJ_8dTPskUVD0hSzW6TO3p21j7GEjc.CLE8Ko3"
   
   def self.run(queries, url, search_id)
     pool = ThreadPool.new(20)
