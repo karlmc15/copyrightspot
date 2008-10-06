@@ -5,7 +5,7 @@ class TrackIfSearchResultSelected < ActiveRecord::Migration
   end
 
   def self.down
-    remove_column :copies, :column_name
-    remove_column :search_results, :column_name
+    remove_column :copies, :search_result_id
+    remove_column :search_results, :searched
   end
 end
