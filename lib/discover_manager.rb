@@ -21,7 +21,9 @@ class DiscoverManager
 	    search_hash = HtmlManager.extract_text(doc)
 	    queries = QueryGenerator.search_terms(search_hash)
 	    # hammer yahoo using distributed computing and collect sites who have copied content
+	    @@logger.info "** BEFORE DISCOVER RUN"
 	    sites = Discover.run(queries, @search.clean_url, search_id)
+	    @@logger.info "** AFTER DISCOVER RUN"
 	    # update database with found words and sites
 	    @search.update_attributes(:search_text => encode(search_hash.values.flatten.uniq))
 	    @job.update_attribute(:status, Job::COMPLETE)
