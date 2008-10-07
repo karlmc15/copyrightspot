@@ -2,6 +2,7 @@ require 'hpricot'
 require 'hpricot_scrub'
 require 'mechanize'
 require 'timeout'
+require 'tidy'
 
 module HtmlManager
   class << self
@@ -23,10 +24,16 @@ module HtmlManager
       html = agent.get(url).parser
       @@logger.info "AFTER GETTING HTML *******************"
       # fix bad html and clean up tags
+      # initialize the Tidy library path
+      Tidy.path = TIDY_PATH
+      tidy = Tidy.new
       tidy.clean(html)
     end
     
     def tidy_html(html)
+      # initialize the Tidy library path
+      Tidy.path = TIDY_PATH
+      tidy = Tidy.new
       tidy.clean(html)
     end
     
@@ -89,10 +96,6 @@ module HtmlManager
           e.remove if found_junk
         end
       end
-    end
-    
-    def tidy
-      @@tidy ||= Tidy.new
     end
     
     # returns an array of words that are grouped together in the html doc
