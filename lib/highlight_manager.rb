@@ -1,8 +1,11 @@
 require 'hpricot'
 
 class HighlightManager
+  
+  @@logger = HighlightLogger.logger
 
   def self.run(copy_id)
+    @@logger.info "** #{self} STARTING TO HIGHLIGHT TEXT ********** #{Time.now} COPY ID -- #{copy_id}"
     begin
       @copy = Copy.find_by_id copy_id
       @search = Search.find_by_id @copy.search_id
@@ -27,8 +30,9 @@ class HighlightManager
       html = HtmlManager.tidy.clean(scan_and_highlight_found_words(found_words, copy_site_html))
       # set navigation into html and save to file system
       @copy.save_html(html)    
+      @@logger.info "** #{self} ENDING THE HIGHLIGHT TEXT ********** #{Time.now} FOUND WORDS -- #{count}"
     rescue Exception => e
-      puts "#{self} -- exception caught: " + e.class.to_s + " inspection: " + e.inspect + "\n" + e.backtrace.join("\n")
+      @@logger.error "#{self} -- exception caught: " + e.class.to_s + " inspection: " + e.inspect + "\n" + e.backtrace.join("\n")
     end    
   end
   
@@ -65,7 +69,8 @@ class HighlightManager
 	    # add remaining text in string scanner to new html
 	    new_html << sc.rest
     rescue Exception => e
-      puts "exception caught: " + e.class.to_s + " inspection: " + e.inspect + "\n" + e.backtrace.join("\n")
+      @@logger.error "exception caught: " + e.class.to_s + " inspection: " + e.inspect + "\n" + e.backtrace.join("\n")
+      return "<h1>Hmmm, that wasn't supposed to happen. Congrats, I think you found a bug.</h1>"
     end
   end
   

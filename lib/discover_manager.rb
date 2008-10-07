@@ -2,8 +2,11 @@ require 'hpricot'
 require 'feed_tools'
 
 class DiscoverManager
+  
+  @@logger = DiscoverLogger.logger
 
   def self.run(search_id, job_id)
+    @@logger.info "** #{self} STARTING TO MANAGE SEARCH ********** #{Time.now} SEARCH ID -- #{search_id}"
     begin
       @search = Search.find_by_id(search_id.to_i)
       @job = DiscoverJob.find_by_id(job_id.to_i)
@@ -22,9 +25,10 @@ class DiscoverManager
 	    # update database with found words and sites
 	    @search.update_attributes(:search_text => encode(search_hash.values.flatten.uniq))
 	    @job.update_attribute(:status, Job::COMPLETE)
+	    @@logger.info "** #{self} ENDING SEARCH MANAGEMENT ********** #{Time.now} -- NUMBER OF FOUND SITES = #{sites.size}"
     rescue Exception => e
       @job.update_attributes(:status => Job::ERROR, :error => "exception caught: " + e.class.to_s + " inspection: " + e.inspect + "\n" + e.backtrace.join("\n"))
-      puts "#{self} -- exception caught: " + e.class.to_s + " inspection: " + e.inspect + "\n" + e.backtrace.join("\n")
+      @@logger.error "#{self} -- exception caught: " + e.class.to_s + " inspection: " + e.inspect + "\n" + e.backtrace.join("\n")
     end    
   end
   

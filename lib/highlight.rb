@@ -1,6 +1,8 @@
 require 'agrep'
 
 class Highlight
+  
+  @@logger = HighlightLogger.logger
 
   def self.run(text, search_words_list)
     pool = ThreadPool.new(20)
@@ -69,8 +71,9 @@ class Highlight
     @found_words.sort!{|a, b| a.index <=> b.index} unless @found_words.blank?
     ensure_unique(@found_words)    
   rescue Exception => e
-    puts "#{self} -- exception caught: " + e.class.to_s + " inspection: " + e.inspect + "\n" + e.backtrace.join("\n")
-    raise "#{self} -- ERROR WHEN HIGHLIGHTING FOUND TEXT :: #{e.inspect}"
+    @@logger.error "#{self} -- exception caught: " + e.class.to_s + " inspection: " + e.inspect + "\n" + e.backtrace.join("\n")
+    # return an empty Array so things keep working for user
+    return Array.new
   end
   
   private

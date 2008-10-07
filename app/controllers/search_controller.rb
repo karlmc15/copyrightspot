@@ -72,12 +72,12 @@ class SearchController < ApplicationController
         render :text => 'working on searching the web'
       else
         dj = DiscoverJob.find_by_id(session[:job_id].to_i)
-        if dj.status == Job::COMPLETE
+        if dj && dj.status == Job::COMPLETE
           session[:job_id] = nil
           render :update do |page|
             page.redirect_to :action => 'show', :id => dj.search_id  
           end
-        elsif dj.status == Job::ERROR
+        elsif dj && dj.status == Job::ERROR
           session[:job_id] = nil
           render :update do |page|
             page.redirect_to :controller => 'search', :action => 'index'

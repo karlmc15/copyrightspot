@@ -5,6 +5,8 @@ class Discover
   
   YAHOO_APPID = "y_UjZJ7V34HtVixluMcJ_JsCZkdJ_8dTPskUVD0hSzW6TO3p21j7GEjc.CLE8Ko3"
   
+  @@logger = DiscoverLogger.logger
+  
   def self.run(queries, url, search_id)
     pool = ThreadPool.new(20)
     @sites = []
@@ -14,6 +16,9 @@ class Discover
         search = CGI.escape("#{query} -site:#{@url}")
         req = "http://boss.yahooapis.com/ysearch/web/v1/#{search}?appid=#{YAHOO_APPID}&format=xml&count=10"
         resp = Net::HTTP.get_response(URI.parse(req))
+        if resp.code.to_s == '404'
+          @@logger.info "** 404 RESPONSE FROM YAHOO FOR THIS URL: #{url} AND QUERY -- #{search}"
+        end
         @sites << parse_results(resp.body)
       end
     end
@@ -21,8 +26,9 @@ class Discover
     pool = nil
     save_results(@sites.flatten!, search_id)
   rescue Exception => e
-    puts "#{self} -- exception caught: " + e.class.to_s + " inspection: " + e.inspect + "\n" + e.backtrace.join("\n")
-    raise "#{self} -- ERROR WHEN SEARCHING YAHOO :: #{e.inspect}"
+    @@logger.error "#{self} -- exception caught: " + e.class.to_s + " inspection: " + e.inspect + "\n" + e.backtrace.join("\n")
+    # return an empty array so the functionality still appears to work
+    return Array.new
   end
   
   private 
