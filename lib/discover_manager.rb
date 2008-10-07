@@ -25,7 +25,7 @@ class DiscoverManager
 	    # update database with found words and sites
 	    @search.update_attributes(:search_text => encode(search_hash.values.flatten.uniq))
 	    @job.update_attribute(:status, Job::COMPLETE)
-	    @@logger.info "** #{self} ENDING SEARCH MANAGEMENT ********** #{Time.now} -- NUMBER OF FOUND SITES = #{sites.size}"
+	    @@logger.info "** #{self} ENDING SEARCH MANAGEMENT ********** #{Time.now} -- NUMBER OF FOUND SITES = #{sites.size unless sites.nil?}"
     rescue Exception => e
       @job.update_attributes(:status => Job::ERROR, :error => "exception caught: " + e.class.to_s + " inspection: " + e.inspect + "\n" + e.backtrace.join("\n"))
       @@logger.error "#{self} -- exception caught: " + e.class.to_s + " inspection: " + e.inspect + "\n" + e.backtrace.join("\n")
