@@ -16,12 +16,12 @@ module HtmlManager
     end
 
     def get_html(url)
-      @@logger "BEFORE AGEN DECLARATION ***********"
+      @@logger.info "BEFORE AGEN DECLARATION ***********"
       agent = WWW::Mechanize.new
       agent.user_agent_alias = 'Linux Mozilla'
-      @@logger "AFTER AGENT DECLARATION **************"
+      @@logger.info "AFTER AGENT DECLARATION **************"
       html = agent.get(url).parser
-      @@logger "AFTER GETTING HTML *******************"
+      @@logger.info "AFTER GETTING HTML *******************"
       # fix bad html and clean up tags
       tidy.clean(html)
     end
