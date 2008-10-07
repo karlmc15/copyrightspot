@@ -24,7 +24,7 @@ module HtmlManager
       # fix bad html and clean up tags
       begin
         timeout(3) do 
-          html = tidy.clean(html)
+          html = tidy.clean(html.inner_html + '<br>')
         end
       rescue Timeout::Error 
         @@logger.info "#{self} ERROR WITH TIDY LIBRARY -- TIMEOUT WITH THIS URL ** #{url}" 
