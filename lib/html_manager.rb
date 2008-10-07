@@ -20,20 +20,16 @@ module HtmlManager
     def get_html(url)
       agent = WWW::Mechanize.new
       agent.user_agent_alias = 'Linux Mozilla'
-      html = agent.get(url).parser
+      html = agent.get(url).body
       # fix bad html and clean up tags
-      begin
-        timeout(3) do 
-          html = tidy.clean(html.inner_html + '<br>')
-        end
-      rescue Timeout::Error 
-        @@logger.info "#{self} ERROR WITH TIDY LIBRARY -- TIMEOUT WITH THIS URL ** #{url}" 
-      end
-      return html
+      # there is a BAD BUG in current ruby library for Tidy 
+      # work around is to make sure Tidy always has bad html
+      # good html breaks is with a segmant fault
+      tidy.clean(html + '<br>')
     end
     
     def tidy_html(html)
-      tidy.clean(html)
+      tidy.clean(html + '<br>')
     end
     
     def set_html_base_url(doc, url)
