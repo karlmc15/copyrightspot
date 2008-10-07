@@ -8,26 +8,20 @@ class DiscoverManager
   def self.run(search_id, job_id)
     @@logger.info "** #{self} STARTING TO MANAGE SEARCH ********** #{Time.now} SEARCH ID -- #{search_id}"
     begin
-      @@logger.info "BEFORE CLASS DEFINITION ****************"
       @search = Search.find_by_id(search_id.to_i)
       @job = DiscoverJob.find_by_id(job_id.to_i)
-      @@logger.info "AFTER CLASS DEFINITION"
       @job.update_attribute(:status, Job::WORKING)
       # check if we have a blog and set html accordingly
-      @@logger.info "BEFORE HTML ********"
       html = (@search.class == FeedEntrySearch ? form_feed_html(@search) : HtmlManager.get_html(@search.url))
 	    doc = Hpricot( html || '', :xhtml_strict => true)
 	    raise 'document is empty' if doc.nil?
-	    @@logger.info "AFTER HTML ************************"
 	    HtmlManager.strip_junk_tags(doc)
 	    HtmlManager.remove_junk_content(doc)
 	    # final collection of search strings with blanks removed
 	    search_hash = HtmlManager.extract_text(doc)
 	    queries = QueryGenerator.search_terms(search_hash)
 	    # hammer yahoo using distributed computing and collect sites who have copied content
-	    @@logger.info "** BEFORE DISCOVER RUN"
 	    sites = Discover.run(queries, @search.clean_url, search_id)
-	    @@logger.info "** AFTER DISCOVER RUN"
 	    # update database with found words and sites
 	    @search.update_attributes(:search_text => encode(search_hash.values.flatten.uniq))
 	    @job.update_attribute(:status, Job::COMPLETE)
