@@ -8,13 +8,17 @@ class DiscoverManager
   def self.run(search_id, job_id)
     @@logger.info "** #{self} STARTING TO MANAGE SEARCH ********** #{Time.now} SEARCH ID -- #{search_id}"
     begin
+      @@logger.info "BEFORE CLASS DEFINITION ****************"
       @search = Search.find_by_id(search_id.to_i)
       @job = DiscoverJob.find_by_id(job_id.to_i)
+      @@logger.info "AFTER CLASS DEFINITION"
       @job.update_attribute(:status, Job::WORKING)
       # check if we have a blog and set html accordingly
+      @@logger.info "BEFORE HTML ********"
       html = (@search.class == FeedEntrySearch ? form_feed_html(@search) : HtmlManager.get_html(@search.url))
 	    doc = Hpricot( html || '', :xhtml_strict => true)
 	    raise 'document is empty' if doc.nil?
+	    @@logger.info "AFTER HTML ************************"
 	    HtmlManager.strip_junk_tags(doc)
 	    HtmlManager.remove_junk_content(doc)
 	    # final collection of search strings with blanks removed
