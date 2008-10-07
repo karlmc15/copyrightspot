@@ -26,7 +26,7 @@ class Search < ActiveRecord::Base
   end
   
   def clean_url
-    host = URI.parse(self.url).host
+    host = URI.parse(self.url.gsub(/\s+/, '')).host
     if host.scan('.').size > 1
       host[host.index('.') + 1, host.size]
     end

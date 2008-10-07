@@ -1,15 +1,23 @@
-MONITOR_LOGGER = Logger.new("#{RAILS_ROOT}/log/monitor.log")
+require 'log4r'
 
 class MonitorLogger
+  include Log4r
   
-  def self.monitor(text)
-    MONITOR_LOGGER.info("**********")
-    MONITOR_LOGGER.info(text)
-    MONITOR_LOGGER.info("**********")
+  def self.method_missing(*args)
+    logger.send(args.shift, args.to_s)
   end
   
-  def self.info(text)
-    MONITOR_LOGGER.info(text)
+  def self.logger
+    @@logger ||= get_logger 
+  end
+  
+  private 
+  
+  def self.get_logger
+    Logger.new("monitor")
+    FileOutputter.new('monitor', :filename=>"#{RAILS_ROOT}/log/monitor.log", :trunc=>false)
+    Logger['monitor'].add 'monitor'
+    Logger['monitor']
   end
   
 end

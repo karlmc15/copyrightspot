@@ -8,7 +8,7 @@ class SearchController < ApplicationController
   
   def find 
     #check if url is a blog and return a list of url that they can click
-    url = params[:search]
+    url = params[:search].gsub(/\s+/, '')
     if url =~ /feed|rss|atom|rdf/
       feed = Feed.new(:url => params[:search])
       if feed.save
@@ -80,7 +80,7 @@ class SearchController < ApplicationController
         elsif dj && dj.status == Job::ERROR
           session[:job_id] = nil
           render :update do |page|
-            page.redirect_to :controller => 'search', :action => 'index'
+            page.redirect_to '/'
           end
         else
           render :text => 'still working on searching the web'

@@ -3,10 +3,11 @@ require 'hpricot_scrub'
 require 'mechanize'
 require 'timeout'
 require 'tidy'
+require 'timeout' 
 
 module HtmlManager
   class << self
-    @@logger = DiscoverLogger.logger
+    @@logger = MonitorLogger.logger
     
     def collect_search_text(url)
       doc = Hpricot(get_html(url) || '', :xhtml_strict => true)
@@ -17,23 +18,21 @@ module HtmlManager
     end
 
     def get_html(url)
-      @@logger.info "BEFORE AGEN DECLARATION ***********"
       agent = WWW::Mechanize.new
       agent.user_agent_alias = 'Linux Mozilla'
-      @@logger.info "AFTER AGENT DECLARATION **************"
       html = agent.get(url).parser
-      @@logger.info "AFTER GETTING HTML *******************"
       # fix bad html and clean up tags
-      # initialize the Tidy library path
-      Tidy.path = TIDY_PATH
-      tidy = Tidy.new
-      tidy.clean(html)
+      begin
+        timeout(3) do 
+          html = tidy.clean(html)
+        end
+      rescue Timeout::Error 
+        @@logger.info "#{self} ERROR WITH TIDY LIBRARY -- TIMEOUT WITH THIS URL ** #{url}" 
+      end
+      return html
     end
     
     def tidy_html(html)
-      # initialize the Tidy library path
-      Tidy.path = TIDY_PATH
-      tidy = Tidy.new
       tidy.clean(html)
     end
     
@@ -48,6 +47,12 @@ module HtmlManager
       else
         h.inner_html = (base + h.inner_html)
       end
+    end
+    
+    def tidy
+      # initialize the Tidy library path
+      Tidy.path = TIDY_PATH
+      Tidy.new
     end
     
     def set_head_navigation(doc, copy_id)
