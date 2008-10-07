@@ -5,6 +5,7 @@ require 'timeout'
 
 module HtmlManager
   class << self
+    @@logger = DiscoverLogger.logger
     
     def collect_search_text(url)
       doc = Hpricot(get_html(url) || '', :xhtml_strict => true)
@@ -15,11 +16,14 @@ module HtmlManager
     end
 
     def get_html(url)
+      @@logger "BEFORE AGEN DECLARATION ***********"
       agent = WWW::Mechanize.new
-      agent.read_timeout = 30
       agent.user_agent_alias = 'Linux Mozilla'
+      @@logger "AFTER AGENT DECLARATION **************"
+      html = agent.get(url).parser
+      @@logger "AFTER GETTING HTML *******************"
       # fix bad html and clean up tags
-      tidy.clean(agent.get(url).body)
+      tidy.clean(html)
     end
     
     def tidy_html(html)
