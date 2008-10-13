@@ -25,7 +25,7 @@ class Search < ActiveRecord::Base
     QueryGenerator.search_terms(get_search_text)
   end
   
-  def clean_url
+  def host
     host = URI.parse(self.url.gsub(/\s+/, '')).host
     if host.scan('.').size > 1
       host[host.index('.') + 1, host.size]

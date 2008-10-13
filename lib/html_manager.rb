@@ -18,14 +18,18 @@ module HtmlManager
     end
 
     def get_html(url)
-      agent = WWW::Mechanize.new
-      agent.user_agent_alias = 'Linux Mozilla'
-      html = agent.get(url).body
-      # fix bad html and clean up tags
-      # there is a BAD BUG in current ruby library for Tidy 
-      # work around is to make sure Tidy always has bad html
-      # good html breaks is with a segmant fault
-      tidy.clean(html + '<br>')
+      begin
+        agent = WWW::Mechanize.new
+	      agent.user_agent_alias = 'Linux Mozilla'
+	      html = agent.get(url).body
+	      # fix bad html and clean up tags
+	      # there is a BAD BUG in current ruby library for Tidy 
+	      # work around is to make sure Tidy always has bad html
+	      # good html breaks is with a segmant fault
+	      tidy.clean(html + '<br>')
+      rescue
+        raise "#{self} -- #{$!} :: PROBLEM READING THIS URL -- #{url}"
+      end
     end
     
     def tidy_html(html)
@@ -43,12 +47,6 @@ module HtmlManager
       else
         h.inner_html = (base + h.inner_html)
       end
-    end
-    
-    def tidy
-      # initialize the Tidy library path
-      Tidy.path = TIDY_PATH
-      Tidy.new
     end
     
     def set_head_navigation(doc, copy_id)
@@ -142,7 +140,14 @@ module HtmlManager
         col
       end.uniq # make sure the returned search list has no duplicates
     end
-
     
+    private 
+    
+    def tidy
+      # initialize the Tidy library path
+      Tidy.path = TIDY_PATH
+      Tidy.new
+    end
+
   end  
 end

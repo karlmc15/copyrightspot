@@ -19,7 +19,13 @@ class FoundWords
   end
   
   def regex
-    /(?im:\b#{@text.split.collect{|s| s.to_s + '.*?'}}\b)/
+    s = @text.split.size
+    r = ''
+    @text.split.inject(1) do |counter, word|
+      r << (counter == s ? word.to_s : word.to_s + '.{0,200}')
+      counter += 1
+    end
+    /(?im:\b#{r}\b)/
   end
   
   def first_word

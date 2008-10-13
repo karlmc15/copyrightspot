@@ -1,7 +1,7 @@
 
 <div id="content_main" class="full">
   <h1>Blog Entries for <%= @feed.url %></h1>
-	<p class="feed_instructions">Choose the entry you’d like to search with</p>
+	<p class="feed_instructions">Choose the entry you’d like to search for reuse with.</p>
   <ul id="results_listing" class="feed">
 	<% @feed_entries.each do |entry| %>
 		<li class="<%= 'visited' if entry.searched %>">

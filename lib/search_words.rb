@@ -15,7 +15,7 @@ class SearchWords
   end
   
   def match_regex
-    create_regex(match_text.split)
+    create_regex(match_text)
   end
   
   def match_text
@@ -106,7 +106,13 @@ class SearchWords
   end
   
   def create_regex(word_list)
-    /(?im:\b#{word_list.collect{|s| s.to_s + '.*?'}}\b)/
+    s = word_list.split.size
+    r = ''
+    word_list.split.inject(1) do |counter, word|
+      r << (counter == s ? word.to_s : word.to_s + '.{0,25}')
+      counter += 1
+    end
+    /(?im:\b#{r}\b)/
   end
   
   def all_words_searched?

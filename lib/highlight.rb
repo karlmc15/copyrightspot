@@ -57,7 +57,9 @@ class Highlight
           sub_pool.shutdown
           sub_pool = nil
           unless @sub_list.blank?
-            @found_words << find_words(SearchWords.new(@sub_list.join(' ')), @text)
+            @sub_list.each do |sl|
+              @found_words << find_words(SearchWords.new(sl), @text)
+            end
           end
         end # end of add found words conditional statements
       end # end of thread pool loop
@@ -83,15 +85,14 @@ class Highlight
     # scan to see how many results there are
     index = 0
     next_index = 0
-    # use the text and not a regex becuase we found exact sentences with levensthein 
-    regex = search_word.match_text
-    index_list = text.scan(/#{regex}/).inject([]) do |list, result|
-      begin_index = @text[next_index, (@text.length)].index(regex)
+    regex = search_word.match_regex
+    index_list = text.scan(regex).inject([]) do |list, result|
+      begin_index = text[next_index, (text.length)].index(regex)
       if begin_index
         # now look for index in smaller chunk
         index =+ (next_index + begin_index)
         next_index = index + search_word.search_size            
-        sub_text = @text[index, (search_word.search_size)]
+        sub_text = text[index, (search_word.search_size)]
         # recheck index to make sure it's in chunk
         index_check = sub_text.index(regex)
         if index_check

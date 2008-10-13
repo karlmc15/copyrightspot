@@ -1,3 +1,6 @@
+<% 
+	@page = 'home'
+ %>
 
 <div id="content_sidebar">
   <ul id="sidebar_modules" class="home">
@@ -32,7 +35,7 @@
   
 
   <div id="search_input" class="clearfix">
-      <input type="text" class="textfield" id="main_search" name='search' value="http://" />
+      <input type="text" class="textfield" id="main_search" name='search' onfocus="clear_input_default_value('main_search','http://')" onblur="reset_input_default_value('main_search','http://')" value="http://" />
       <input type="submit" class="submit_button" id="main_submit" value="Search" />
   </div>
 

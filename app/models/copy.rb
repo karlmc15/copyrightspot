@@ -16,23 +16,23 @@ class Copy < ActiveRecord::Base
   def save_html(html)
     path = File.join(BASE_DIR, self.search_id.to_s, self.id.to_s)
     FileUtils.mkdir_p(path)    
-    File.open("#{path}/#{self.file_name}.html", 'w') { |f| f.write(set_nav_in_html(html)) }
+    File.open("#{path}/#{self.file_name}.html", 'w') { |f| f.write(html) }
   end
   
   def get_html_path
     path = File.join(BASE_DIR, self.search_id.to_s, self.id.to_s)
     "#{path}/#{self.file_name}.html"
   end
-
-  private 
   
   def set_nav_in_html(html)
-    doc = Hpricot(html || '', :xhtml_strict => true)
+    doc = Hpricot(html)
     HtmlManager.set_html_base_url(doc, self.url)
     HtmlManager.set_head_navigation(doc, self.id)
     doc.to_html
   end
-  
+
+  private 
+
   def create_file_name
     self.file_name = Digest::SHA1.hexdigest((Time.now.to_i - rand(1000000)).to_s).slice(0,25)
   end

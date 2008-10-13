@@ -8,7 +8,7 @@ class SearchController < ApplicationController
   
   def find 
     #check if url is a blog and return a list of url that they can click
-    url = params[:search].gsub(/\s+/, '')
+    url = params[:search].gsub(' ', '')
     if url =~ /feed|rss|atom|rdf/
       feed = Feed.new(:url => params[:search])
       if feed.save
@@ -16,6 +16,9 @@ class SearchController < ApplicationController
         @message = 'Give me a minute while I grab your blog feed'
         @update_url = url_for(:action => 'feed_progress')
         render :template => '/shared/searching'
+      else
+        flash[:error] = "The url entered is not valid: #{url}"
+        redirect_to '/'
       end
     else
       @search = WebPageSearch.new(:url => url)
@@ -24,10 +27,14 @@ class SearchController < ApplicationController
         @message = 'One minute while I Search the web'
         @update_url = url_for(:action => 'search_progress')
         render :template => '/shared/searching'
+      else
+        flash[:error] = "The url entered is not valid: #{url}"
+        redirect_to '/'
       end
     end
   rescue Exception => e
     logger.error "exception caught: " + e.class.to_s + " inspection: " + e.inspect + "\n" + e.backtrace.join("\n")
+    flash[:error] = e.inspect
     redirect_to '/'
   end
   
@@ -52,6 +59,7 @@ class SearchController < ApplicationController
     logger.error "exception caught: " + e.class.to_s + " inspection: " + e.inspect + "\n" + e.backtrace.join("\n")
     render :update do |page|
       session[:populate_feed] = nil
+      flash[:error] = e.inspect
       page.redirect_to '/'
     end
   end
@@ -80,6 +88,7 @@ class SearchController < ApplicationController
         elsif dj && dj.status == Job::ERROR
           session[:job_id] = nil
           render :update do |page|
+            flash[:error] = (dj.message.blank? ? 'I had a problem reading the URL entered.' : dj.message)
             page.redirect_to '/'
           end
         else
@@ -92,6 +101,7 @@ class SearchController < ApplicationController
     render :update do |page|
       session[:job_id] = nil
       session[:start_search] = nil
+      flash[:error] = e.inspect
       page.redirect_to '/'
     end
   end

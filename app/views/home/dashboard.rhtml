@@ -8,7 +8,7 @@
   <p>Are you a professional author, blogger or poet? Be the first to know when Pro Accounts are available.</p>
 <% form_remote_tag :url => '/home/notify' do -%>
 	<div id='opt_in_fields'>
-  		<p><input type="text" class="textfield" value="your email" name='notify_email' /></p>
+  		<p><input type="text" class="textfield" value="your email" name='notify_email' id='notify_field' onfocus="clear_input_default_value('notify_field','your email')" onblur="reset_input_default_value('notify_field','your email')" /></p>
   		<p>
 		<%= hidden_field_tag 'page', 'pro' %>
     	<input type="submit" class="submit_button" value="Yes! Keep me informed." />
@@ -19,7 +19,7 @@
 <% end -%>
   
   <h1>Ideas Wanted</h1>
-  <p>Do you have ideas of what you'd like in a Pro Account? <a href="http://getsatisfaction.com/copyrightspot/">Share&nbsp;your&nbsp;idea</a>.</p>
+  <p>Do you have ideas of what you’d like in a Pro Account? <a href="http://getsatisfaction.com/copyrightspot/">Share&nbsp;your&nbsp;idea</a>.</p>
 
 </div>
 
