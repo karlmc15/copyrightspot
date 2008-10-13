@@ -29,7 +29,9 @@ class HighlightManager
       # set copy results 
       @copy.update_attribute(:found_count, count)
       # get html from copied site and scan through it highlighting found words
-      html = scan_and_highlight_found_words(found_words, @copy.set_nav_in_html(copy_site_html))
+      # added html tidy cleanup so extra text is not highlighted but this remove some of the highlighting because it is bad html syntax
+      # need to come up with a better way to highlight
+      html = HtmlManager.tidy_html(scan_and_highlight_found_words(found_words, @copy.set_nav_in_html(copy_site_html)))
       # set navigation into html and save to file system
       @copy.save_html(html)    
       @@logger.info "** #{self} ENDING THE HIGHLIGHT TEXT ********** #{Time.now} FOUND WORDS -- #{count}"
