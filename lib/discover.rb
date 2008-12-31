@@ -14,7 +14,7 @@ class Discover
     queries.each do |query|
       pool.dispatch(query) do |query|
         search = CGI.escape("#{query} -site:#{@url}")
-        req = "http://boss.yahooapis.com/ysearch/web/v1/#{search}?appid=#{YAHOO_APPID}&format=xml&count=10"
+        req = "http://boss.yahooapis.com/ysearch/web/v1/#{search}?appid=#{YAHOO_APPID}&format=xml&count=50"
         resp = Net::HTTP.get_response(URI.parse(req))
         if resp.code.to_s == '404'
           @@logger.info "** 404 RESPONSE FROM YAHOO FOR THIS URL: #{url} AND QUERY -- #{search}"
