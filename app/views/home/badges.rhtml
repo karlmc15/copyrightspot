@@ -1,0 +1,134 @@
+<% 
+  @page_title = "Plagiarism Protected Badges"
+ %>
+
+<div id="content_main">
+  <h1>Has your writing been re-used without your consent?</h1>
+  <p>Would you like to defend your site from would be thief’s? Simply follow the 3 easy steps below to defend your site.</p>
+  
+  <h2 id="badge-steps">1. Choose your color</h2>
+    <div class="clearfix badge-color-selection">
+      <div><input type="radio" name="color" value="orange" id="color_orange" checked="checked" onclick="size_color('orange')"/></div>
+      <div><label for="color_orange"><span class="badge-color-orange">&nbsp;</span></label></div>
+      
+      <div><input type="radio" name="color" value="white" id="color_white" onclick="size_color('white')"/></div>
+      <div><label for="color_white"><span class="badge-color-white">&nbsp;</span></label></div>
+      
+      <div><input type="radio" name="color" value="black" id="color_black" onclick="size_color('black')"/></div>
+      <div><label for="color_black"><span class="badge-color-black">&nbsp;</span></label></div>
+    </div>
+    
+  <h2 id="badge-steps">2. Choose your size</h2>
+  
+  <div class="badge-size-selection" id="orange-sizes">
+    <ul>
+      <li>
+        <div class="clearfix badge-container">
+          <div><input type="radio" name="size" value="small" id="orange_size_small" class="badge-size-small" onclick="show_html(small_badge)"/></div>
+          <div><label for="orange_size_small"><image src="images/badges/cspot_orange_90x44.gif"/></label></div>
+        </div>
+      </li>
+      <li>
+        <div class="clearfix badge-container">
+          <div><input type="radio" name="size" value="large" id="orange_size_large" class="badge-size-large" onclick="show_html(large_badge)"/></div>
+          <div><label for="orange_size_large"><image src="images/badges/cspot_orange_130x60.gif"/></label></div>
+        </div>
+      </li>
+      <li>
+        <div class="clearfix badge-container">
+          <div><input type="radio" name="size" value="long" id="orange_size_long" class="badge-size-long" onclick="show_html(long_badge)"/></div>
+          <div><label for="orange_size_long"><image src="images/badges/cspot_orange_230x30.gif"/></label></div>
+        </div>
+      </li>
+    </ul>
+  </div>
+  
+  <div class="badge-size-selection" id="white-sizes" style="display:none;">
+    <ul>
+      <li>
+        <div class="clearfix badge-container">
+          <div><input type="radio" name="size" value="small" id="white_size_small" class="badge-size-small" onclick="show_html(small_badge)"/></div>
+          <div><label for="white_size_small"><image src="images/badges/cspot_white_90x44.gif"/></label></div>
+        </div>
+      </li>
+      <li>
+        <div class="clearfix badge-container">
+          <div><input type="radio" name="size" value="large" id="white_size_large" class="badge-size-large" onclick="show_html(large_badge)"/></div>
+          <div><label for="white_size_large"><image src="images/badges/cspot_white_130x60.gif"/></label></div>
+        </div>
+      </li>
+      <li>
+        <div class="clearfix badge-container">
+          <div><input type="radio" name="size" value="long" id="white_size_long" class="badge-size-long" onclick="show_html(long_badge)"/></div>
+          <div><label for="white_size_long"><image src="images/badges/cspot_white_230x30.gif"/></label></div>
+        </div>
+      </li>
+    </ul>
+  </div>
+  
+  <div class="badge-size-selection" id="black-sizes" style="display:none;">
+    <ul>
+      <li>
+        <div class="clearfix badge-container">
+          <div><input type="radio" name="size" value="small" id="black_size_small" class="badge-size-small" onclick="show_html(small_badge)"/></div>
+          <div><label for="black_size_small"><image src="images/badges/cspot_black_90x44.gif"/></label></div>
+        </div>
+      </li>
+      <li>
+        <div class="clearfix badge-container">
+          <div><input type="radio" name="size" value="large" id="black_size_large" class="badge-size-large" onclick="show_html(large_badge)"/></div>
+          <div><label for="black_size_large"><image src="images/badges/cspot_black_130x60.gif"/></label></div>
+        </div>
+      </li>
+      <li>
+        <div class="clearfix badge-container">
+          <div><input type="radio" name="size" value="long" id="black_size_long" class="badge-size-long" onclick="show_html(long_badge)"/></div>
+          <div><label for="black_size_long"><image src="images/badges/cspot_black_230x30.gif"/></label></div>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <h2 id="badge-steps">3. Copy and Paste HTML on to your site</h2>
+  
+  <div id="html-container">
+    <textarea id="badge_html"></textarea>
+  </div>
+  
+
+  <p id="custom-badge-text"><%= link_to 'Download Photoshop files', :action => 'badges_psd_zip' %> for all the badges if you’d like to customize them yourself.</p>
+
+   <script type="text/javascript" charset="utf-8">
+    
+    var current_color = "orange";
+    
+    var small_badge = ['90','44'];
+    var large_badge = ['130', '60'];
+    var long_badge = ['230', '30'];
+    
+    function size_color(color){
+      $(current_color + '-sizes').hide();
+      $(color + '-sizes').show();
+      deselect_size_choose();
+      current_color = color;
+      Element.update('html-container', "<textarea id=\"badge_html\"></textarea>");
+    }
+    
+    function deselect_size_choose(){
+      $(current_color + "_size_small").checked = false;
+      $(current_color + "_size_large").checked = false;
+      $(current_color + "_size_long").checked = false;
+    }
+    
+    function show_html(size){
+      image_width = size[0];
+      image_height = size[1];
+      image_name = "cspot_" + current_color + "_" + image_width + "x" + image_height + ".gif";
+      html = "<a href=\"http://copyrightspot.com\"><img src=\"http://copyrightspot.com/images/badges/" + image_name + "\" alt=\"Protected by CopyrightSpot\" title=\"Plagiarism Detected by CopyrightSpot | Do Not Copy\" width=\"" + image_width + "\" height=\"" + image_height + "\" border=\"0\"/></a>";
+      $('badge_html').value = html;
+    }
+    
+    
+   </script>
+   
+</div>

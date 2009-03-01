@@ -11,9 +11,13 @@
 <% end %>
 
 <% if @results.blank? %>
-	<h1>No reuse was found for that page.</h1>
+  <%= render :partial => 'shared/badge_pitch' %>
+  
+	<h1>No re-use was found for the writing on that page.</h1>
 
 <% else %>
+    <%= render :partial => 'shared/badge_pitch' %>
+  
 	  <h1>Search Results</h1>
 
 		<p>Select a result to highlight your copied writings.</p>

@@ -7,4 +7,8 @@ class HomeController < ApplicationController
     end
   end
   
+  def badges_psd_zip
+    send_file 'public/downloads/cspot_psd_files.zip'
+  end
+  
 end

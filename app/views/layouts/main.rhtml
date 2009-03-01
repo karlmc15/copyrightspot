@@ -7,9 +7,9 @@
 	 <% if @page == 'home' %>
 	 	<meta name="description" content="CopyrightSpot allows you to discover all the spots where your licensed and unlicensed original writing lives on the web.">
 	 <% end %>
-    <title><%= @page_title || 'CopyrightSpot - Free Plagiarism Detection' %></title>
+    <title><%= @page_title ? "#{@page_title} - CopyrightSpot" : 'CopyrightSpot - Free Plagiarism Detection' %></title>
   	 <%= stylesheet_link_tag 'main' %>
-	 <%= javascript_include_tag :defaults %>
+	   <%= javascript_include_tag :defaults %>
   </head>
   
   <body>
@@ -21,7 +21,7 @@
         <div id="logo"><a href="/"><img src="/images/cspot_dark.gif" width="322" height="50" alt="CopyrightSpot"></a></div>
         <div id="nav">
 			 <%= link_to 'About', {:controller => 'home', :action => 'about'}, {:class => "#{'active' if @page=='about'}"} %>
-          <a href="http://blog.copyrightspot.com/">Blog</a>
+          <a href="http://blog.copyrightspot.com/" target="_blank">Blog</a>
 			 <%= link_to 'Dashboard', {:controller => 'home', :action => 'dashboard'}, {:class => "#{'active' if @page=='dashboard'}"} %>
 
         </div>
