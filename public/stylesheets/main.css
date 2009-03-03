@@ -70,10 +70,11 @@ div.error{padding:10px 5px; background-color:#ffebe8; border:1px solid #dd3c10; 
 .badge-color-white{ background:white; }
 .badge-color-selection div{ float:left; }
 .badge-color-selection span {  width:50px; height:20px; border:1px solid #CCC9C6; display:block; margin-right:30px; }
-.badge-color-selection input{ margin-top:5px; }
+.badge-color-selection input{ margin-top:5px; margin-right:3px;}
 .badge-container div{ float:left; }
 .badge-size-selection ul{ list-style-type:none; }
 .badge-size-selection ul li{ margin-bottom:15px; }
+.badge-size-selection input{ margin-right:3px; }
 .badge-size-selection input.badge-size-small{ margin-top:15px; }
 .badge-size-selection input.badge-size-large{ margin-top:25px; }
 .badge-size-selection input.badge-size-long{ margin-top:10px; }
