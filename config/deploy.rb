@@ -38,6 +38,9 @@ set :deploy_via, :remote_cache
 #############################################################
 #  Passenger
 #############################################################
+
+before  "deploy", "deploy:web:disable"
+after   "deploy", "deploy:web:enable"
  
 namespace :deploy do
   
