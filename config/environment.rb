@@ -23,8 +23,8 @@ Rails::Initializer.run do |config|
   # Specify gems that this application depends on. 
   # They can then be installed with "rake gems:install" on new installations.
   config.gem 'tidy'
-  config.gem 'hpricot', :version => '0.6'
-  config.gem 'mechanize', :version => '0.9.0'
+  config.gem 'hpricot'#, :version => '0.6'
+  config.gem 'mechanize'#, :version => '0.9.0'
   config.gem 'amatch'
   config.gem 'asciify'
   config.gem 'feedtools', :lib => 'feed_tools'
