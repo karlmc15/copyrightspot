@@ -24,11 +24,12 @@ Rails::Initializer.run do |config|
   # They can then be installed with "rake gems:install" on new installations.
   config.gem 'tidy'
   config.gem 'hpricot', :version => '0.6'
-  config.gem 'mechanize', :version => '0.8.2'
+  config.gem 'mechanize', :version => '0.9.0'
   config.gem 'amatch'
   config.gem 'asciify'
   config.gem 'feedtools', :lib => 'feed_tools'
   config.gem 'mislav-will_paginate', :lib => 'will_paginate'
+  config.gem 'log4r'
   
   # config.gem "hpricot", :version => '0.6', :source => "http://code.whytheluckystiff.net"
   # config.gem "aws-s3", :lib => "aws/s3"
