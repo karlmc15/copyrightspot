@@ -23,9 +23,13 @@ Rails::Initializer.run do |config|
   # Specify gems that this application depends on. 
   # They can then be installed with "rake gems:install" on new installations.
   config.gem 'tidy'
-  config.gem 'hpricot'
-  config.gem 'mechanize'
+  config.gem 'hpricot', :version => '0.6'
+  config.gem 'mechanize', :version => '0.8.2'
   config.gem 'amatch'
+  config.gem 'asciify'
+  config.gem 'feedtools', :lib => 'feed_tools'
+  config.gem 'mislav-will_paginate', :lib => 'will_paginate'
+  
   # config.gem "hpricot", :version => '0.6', :source => "http://code.whytheluckystiff.net"
   # config.gem "aws-s3", :lib => "aws/s3"
 
@@ -35,7 +39,7 @@ Rails::Initializer.run do |config|
   # config.plugins = [ :exception_notification, :ssl_requirement, :all ]
 
   # Add additional load paths for your own custom dirs
-  config.load_paths += %W( #{RAILS_ROOT}/vendor/gems/asciify/lib )
+  #config.load_paths += %W( #{RAILS_ROOT}/vendor/gems/asciify/lib )
 
   # Force all environments to use the same logger level
   # (by default production uses :info, the others :debug)
@@ -72,13 +76,7 @@ end
 #ActiveRecord::Base.allow_concurrency = true if Rails.development?
 
 require 'open-uri'
-require 'hpricot'
 require 'hpricot_scrub'
-require 'mechanize'
-require 'tidy'
-require 'feed_tools'
-require 'will_paginate'
-
 require 'utilities'
 
 # initialize the Tidy library path
