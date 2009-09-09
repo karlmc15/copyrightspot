@@ -1,8 +1,10 @@
 module Spawn
+  RAILS_1_x = (::Rails::VERSION::MAJOR == 1) unless defined?(RAILS_1_x)
+  RAILS_2_2 = (::Rails::VERSION::MAJOR > 2 || (::Rails::VERSION::MAJOR == 2 && ::Rails::VERSION::MINOR >= 2)) unless defined?(RAILS_2_2)
 
   # default to forking (unless windows or jruby)
   @@method = (RUBY_PLATFORM =~ /(win32|java)/) ? :thread : :fork
-  # socket to close in child process
+  # things to close in child process
   @@resources = []
   # in some environments, logger isn't defined
   @@logger = defined?(RAILS_DEFAULT_LOGGER) ? RAILS_DEFAULT_LOGGER : Logger.new(STDERR)
@@ -18,9 +20,9 @@ module Spawn
     @@logger.debug "spawn> method = #{@@method}" if defined? RAILS_DEFAULT_LOGGER
   end
 
-  # set the resource to disconnect from in the child process (when forking)
-  def self.resource_to_close(resource)
-    @@resources << resource
+  # set the resources to disconnect from in the child process (when forking)
+  def self.resources_to_close(*resources)
+    @@resources = resources
   end
 
   # close all the resources added by calls to resource_to_close
@@ -28,7 +30,8 @@ module Spawn
     @@resources.each do |resource|
       resource.close if resource && resource.respond_to?(:close) && !resource.closed?
     end
-    @@resources = []
+    # in case somebody spawns recursively
+    @@resources.clear
   end
 
   # Spawns a long-running section of code and returns the ID of the spawned process.
@@ -41,7 +44,8 @@ module Spawn
     if options[:method] == :yield || @@method == :yield
       yield
     elsif options[:method] == :thread || (options[:method] == nil && @@method == :thread)
-      if ActiveRecord::Base.allow_concurrency
+      # for versions before 2.2, check for allow_concurrency
+      if RAILS_2_2 || ActiveRecord::Base.allow_concurrency
         thread_it(options) { yield }
       else
         @@logger.error("spawn(:method=>:thread) only allowed when allow_concurrency=true")
@@ -104,8 +108,12 @@ module Spawn
       ensure
         begin
           # to be safe, catch errors on closing the connnections too
-          ActiveRecord::Base.connection.disconnect!
-          ActiveRecord::Base.remove_connection
+          if RAILS_2_2
+            ActiveRecord::Base.connection_handler.clear_all_connections!
+          else
+            ActiveRecord::Base.connection.disconnect!
+            ActiveRecord::Base.remove_connection
+          end
         ensure
           @@logger.info "spawn> child[#{Process.pid}] took #{Time.now - start} sec"
           # this form of exit doesn't call at_exit handlers
@@ -113,7 +121,7 @@ module Spawn
         end
       end
     end
-    
+
     # detach from child process (parent may still wait for detached process if they wish)
     Process.detach(child)
 

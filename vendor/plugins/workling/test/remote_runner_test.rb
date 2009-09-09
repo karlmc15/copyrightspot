@@ -10,7 +10,7 @@ context "the remote runner" do
     clazz, method, options = :util, :echo, { :message => "somebody_came@along.com" }
     old_dispatcher = Workling::Remote.dispatcher
     dispatcher = mock
-    dispatcher.expects(:run_with_error_handling).with(clazz, method, options)
+    dispatcher.expects(:run).with(clazz, method, options)
     Workling::Remote.dispatcher = dispatcher
     Workling::Remote.run(clazz, method, options)
     Workling::Remote.dispatcher = old_dispatcher # set back to whence we came
@@ -20,7 +20,7 @@ context "the remote runner" do
     Workling::Remote.dispatcher.class.should.equal Workling.default_runner.class
   end
   
-  specify "should raise a Workling::WorklingNotFoundError if it is invoked with a worker key that canont be constantized" do
+  specify "should raise a Workling::WorklingNotFoundError if it is invoked with a worker key that cannot be constantized" do
     should.raise Workling::WorklingNotFoundError do
       Workling::Remote.run(:quatsch_mit_sosse, :fiddle_di_liddle)
     end
@@ -28,7 +28,7 @@ context "the remote runner" do
   
   specify "should raise a Workling::WorklingNotFoundError if it is invoked with a valid worker key but the method is not defined on that worker" do
     dispatcher = Workling::Remote.dispatcher
-    Workling::Remote.dispatcher = Workling::Remote::Runners::NotRemoteRunner.new
+    Workling::Remote.dispatcher = Workling::Remote::Runners::ThreadRunner.new # simulates a remote runner (workling in another context)
     
     should.raise Workling::WorklingNotFoundError do
       Workling::Remote.run(:util, :sau_sack)

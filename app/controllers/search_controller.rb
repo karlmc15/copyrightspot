@@ -75,7 +75,8 @@ class SearchController < ApplicationController
           job.save
           session[:job_id] = job.id
           # this is kind of expensive to create ... move to an ajax request
-          Workling::Remote.run(:discover_worker, :run, :job_id => job.id, :search_id => search_id)
+          #Workling::Remote.run(:discover_worker, :run, :job_id => job.id, :search_id => search_id)
+          DiscoverWorker.async_run(:job_id => job.id, :search_id => search_id)
         end
         render :text => 'working on searching the web'
       else

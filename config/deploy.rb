@@ -3,7 +3,7 @@
 #############################################################
  
 set :application, "cspot"
-set :deploy_to, "/var/www/#{application}"
+set :deploy_to, "/home/matt/www/#{application}"
  
 #############################################################
 #  Settings
@@ -11,7 +11,7 @@ set :deploy_to, "/var/www/#{application}"
  
 default_run_options[:pty] = true
 ssh_options[:forward_agent] = true
-set :use_sudo, true
+set :use_sudo, false
 set :scm_verbose, true 
  
 #############################################################
@@ -20,7 +20,7 @@ set :scm_verbose, true
  
 set :user, "matt"
 ssh_options[:port] = 420
-set :domain, "copyrightspot.com"
+set :domain, "myfreecopyright.com"
 server domain, :app, :web
 role :db, domain, :primary => true
  
