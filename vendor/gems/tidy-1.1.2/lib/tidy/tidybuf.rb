@@ -11,13 +11,11 @@ class Tidybuf
   # Mimic TidyBuffer.
   #
   TidyBuffer = struct [
-    "int* allocator",
     "byte* bp",
     "uint size",
     "uint allocated",
     "uint next"
   ]
-
 
   def initialize
     @struct = TidyBuffer.malloc
