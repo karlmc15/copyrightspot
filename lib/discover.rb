@@ -2,33 +2,22 @@ require 'net/http'
 require 'hpricot'
 
 class Discover
-  
-  YAHOO_APPID = "y_UjZJ7V34HtVixluMcJ_JsCZkdJ_8dTPskUVD0hSzW6TO3p21j7GEjc.CLE8Ko3"
-  
-  @@logger = DiscoverLogger.logger
-  
+    
   def self.run(queries, url, search_id)
-    pool = ThreadPool.new(20)
     @sites = []
-    @url = url
-    queries.each do |query|
-      pool.dispatch(query) do |query|
-        search = CGI.escape("#{query} -site:#{@url}")
-        req = "http://boss.yahooapis.com/ysearch/web/v1/#{search}?appid=#{YAHOO_APPID}&format=xml&count=50"
-        resp = Net::HTTP.get_response(URI.parse(req))
-        if resp.code.to_s == '404'
-          @@logger.info "** 404 RESPONSE FROM YAHOO FOR THIS URL: #{url} AND QUERY -- #{search}"
+    responses = Boss::Gateway.web_search(queries, :site_url => url)
+    @sites = responses.inject([]) do |col, resp|
+      resp.result_set.each do |result|
+        if result.url
+          col << SearchResult.new(:url => scrub_result(result.url),
+                                  :dispurl => scrub_result(result.dispurl),
+                                  :title => scrub_result(result.title),
+                                  :abstract => scrub_result(result.abstract))
         end
-        @sites << parse_results(resp.body)
       end
+      col.flatten
     end
-    pool.shutdown
-    pool = nil
-    save_results(@sites.flatten!, search_id)
-  rescue Exception => e
-    @@logger.error "#{self} -- exception caught: " + e.class.to_s + " inspection: " + e.inspect + "\n" + e.backtrace.join("\n")
-    # return an empty array so the functionality still appears to work
-    return Array.new
+    save_results(@sites, search_id)
   end
   
   private 
@@ -42,21 +31,8 @@ class Discover
     end
   end
   
-  def self.parse_results(xml)
-    doc = Hpricot::XML xml
-    (doc / '//result').inject([]) do |list, entry|
-      results = {
-        :url => scrub_result(entry.at('/url')),
-        :dispurl => scrub_result(entry.at('/dispurl')),
-        :title => scrub_result(entry.at('/title')),
-        :abstract => scrub_result(entry.at('/abstract'))
-        }
-      list << SearchResult.new(results)
-    end
-  end
-  
-  def self.scrub_result(elem)
-    doc = Hpricot(elem.inner_text)
+  def self.scrub_result(str)
+    doc = Hpricot(str)
     doc.to_plain_text
     doc.inner_text
   end

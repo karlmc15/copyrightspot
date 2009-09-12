@@ -1,81 +1,64 @@
 require 'agrep'
 
 class Highlight
-  
-  @@logger = HighlightLogger.logger
 
   def self.run(text, search_words_list)
-    pool = ThreadPool.new(20)
     @found_words = []
     @text = text
     search_words = search_words_list.inject([]){ |list, words| list << SearchWords.new(words) }
     # get a list of search words which pass our threshold
     search_words.each do |sw|
-      pool.dispatch(sw) do |sw|
-        # loop thru search word text and find matches using levensthein algorithm
-        a_dis = Agrep.calc_distance(sw.to_s, @text)
-        if a_dis == 0
-          @found_words << find_words(sw, @text)
-        elsif sw.word_size >= 10 
-          # break text apart until 0's are found
-          # put another thread pool around this loop
-          sub_pool = ThreadPool.new(10)
-          @sub_list = []
-          sw.text_list.each do |st|
-            sub_pool.dispatch(st) do |st|
-              b_dis = Agrep.calc_distance(st, @text)
-              if b_dis == 0
-                @sub_list << st
-              elsif b_dis <= Agrep.threshold 
-                # shuffle through the remaing words one word at a time to see if we can grab anything left
-                # get text as word array
-                aw_list = st.split
-                base = aw_list.slice!(0,3).join(' ')
-                ft = []
-                counter = 0
-                until aw_list.empty?
-                  base += " #{aw_list.shift}" unless counter == 0
-                  if Agrep.calc_distance(base, @text) == 0
-                    # add current base to found text
-                    ft << base
-                  else
-                    # take a word off front of base
-                    ba = base.split
-                    ba.shift
-                    base = ba.join(' ')
-                  end
-                  counter += 1
-                end
-                # find largest found text and add that too our found words
-                unless ft.blank?
-                  ft.sort!{|a,b|a.length<=>b.length}
-                  @sub_list << ft.pop
-                end
+      # loop thru search word text and find matches using levensthein algorithm
+      a_dis = Agrep.calc_distance(sw.to_s, @text)
+      if a_dis == 0
+        @found_words << find_words(sw, @text)
+      elsif sw.word_size >= 10 
+        # break text apart until 0's are found
+        # put another thread pool around this loop
+        @sub_list = []
+        sw.text_list.each do |st|
+          b_dis = Agrep.calc_distance(st, @text)
+          if b_dis == 0
+            @sub_list << st
+          elsif b_dis <= Agrep.threshold 
+            # shuffle through the remaing words one word at a time to see if we can grab anything left
+            # get text as word array
+            aw_list = st.split
+            base = aw_list.slice!(0,3).join(' ')
+            ft = []
+            counter = 0
+            until aw_list.empty?
+              base += " #{aw_list.shift}" unless counter == 0
+              if Agrep.calc_distance(base, @text) == 0
+                # add current base to found text
+                ft << base
+              else
+                # take a word off front of base
+                ba = base.split
+                ba.shift
+                base = ba.join(' ')
               end
-            end # end of sub thread pool
-          end # end of search word text broken into smaller chunk loop
-          sub_pool.shutdown
-          sub_pool = nil
-          unless @sub_list.blank?
-            @sub_list.each do |sl|
-              @found_words << find_words(SearchWords.new(sl), @text)
+              counter += 1
+            end
+            # find largest found text and add that too our found words
+            unless ft.blank?
+              ft.sort!{|a,b|a.length<=>b.length}
+              @sub_list << ft.pop
             end
           end
-        end # end of add found words conditional statements
-      end # end of thread pool loop
+        end # end of search word text broken into smaller chunk loop
+        unless @sub_list.blank?
+          @sub_list.each do |sl|
+            @found_words << find_words(SearchWords.new(sl), @text)
+          end
+        end
+      end # end of add found words conditional statements
     end # end of agrep loop for search words
-    # shutdown pool thread
-    pool.shutdown
-    pool = nil
     # sort and make found words list unique
     @found_words.flatten!
     @found_words.compact!
     @found_words.sort!{|a, b| a.index <=> b.index} unless @found_words.blank?
     ensure_unique(@found_words)    
-  rescue Exception => e
-    @@logger.error "#{self} -- exception caught: " + e.class.to_s + " inspection: " + e.inspect + "\n" + e.backtrace.join("\n")
-    # return an empty Array so things keep working for user
-    return Array.new
   end
   
   private

@@ -29,7 +29,7 @@ class DiscoverWorker < Workling::Base
 	    @job.update_attribute(:status, Job::COMPLETE)
 	    logger.info "** #{self} ENDING SEARCH MANAGEMENT ********** #{Time.now} -- NUMBER OF FOUND SITES = #{sites.size unless sites.nil?}"
     rescue Exception => e
-      #@job.update_attribute(:status, Job::ERROR)
+      @job.update_attribute(:status, Job::ERROR)
       logger.error "#{self} -- exception caught: " + e.class.to_s + " inspection: " + e.inspect + "\n" + e.backtrace.join("\n")
     end    
   end

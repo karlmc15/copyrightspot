@@ -24,12 +24,11 @@ Rails::Initializer.run do |config|
   # They can then be installed with "rake gems:install" on new installations.
   config.gem 'tidy'
   config.gem 'hpricot', :version => '0.6.164'
-  config.gem 'mechanize', :version => '0.9.0'
   config.gem 'amatch'
   config.gem 'asciify'
   config.gem 'feedtools', :lib => 'feed_tools'
   config.gem 'mislav-will_paginate', :lib => 'will_paginate'
-  config.gem 'log4r'
+  config.gem 'taf2-curb', :lib => 'curb'
   
   # config.gem "hpricot", :version => '0.6', :source => "http://code.whytheluckystiff.net"
   # config.gem "aws-s3", :lib => "aws/s3"
@@ -40,7 +39,7 @@ Rails::Initializer.run do |config|
   # config.plugins = [ :exception_notification, :ssl_requirement, :all ]
 
   # Add additional load paths for your own custom dirs
-  #config.load_paths += %W( #{RAILS_ROOT}/vendor/gems/asciify/lib )
+  config.load_paths += %W( #{RAILS_ROOT}/vendor/gem_hacks )
 
   # Force all environments to use the same logger level
   # (by default production uses :info, the others :debug)
@@ -77,8 +76,14 @@ end
 #ActiveRecord::Base.allow_concurrency = true if Rails.development?
 
 require 'open-uri'
-require 'hpricot_scrub'
 require 'utilities'
+require 'hpricot_scrub'
+
+# need this hack for production 64-bit tidy lib has different Buffer structure
+if Rails.production?
+  Tidybuf.instance_eval('remove_const(\'TidyBuffer\')')
+  require 'tidy/tidybuf_hack'
+end
 
 # initialize the Tidy library path
 Tidy.path = TIDY_PATH

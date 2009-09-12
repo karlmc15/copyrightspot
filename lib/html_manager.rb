@@ -1,13 +1,8 @@
 require 'hpricot'
-require 'hpricot_scrub'
-require 'mechanize'
-require 'timeout'
 require 'tidy'
-require 'timeout' 
 
 module HtmlManager
   class << self
-    @@logger = MonitorLogger.logger
     
     def collect_search_text(url)
       doc = Hpricot(get_html(url) || '', :xhtml_strict => true)
@@ -18,21 +13,16 @@ module HtmlManager
     end
 
     def get_html(url)
-      begin
-        agent = WWW::Mechanize.new
-	      agent.user_agent_alias = 'Linux Mozilla'
-	      html = agent.get(url).body
-	      # fix bad html and clean up tags
-	      # there is a BAD BUG in current ruby library for Tidy 
-	      # work around is to make sure Tidy always has bad html
-	      # good html breaks is with a segmant fault
-	      tidy.clean(html + '<br>')
-      rescue
-        raise "#{self} -- #{$!} :: PROBLEM READING THIS URL -- #{url}"
-      end
+      response = Http::Gateway.get(url)
+      #TODO handle different http response codes 
+      tidy_html(response.body || '')
     end
     
     def tidy_html(html)
+      # fix bad html and clean up tags
+      # there is a BAD BUG in current ruby library for Tidy 
+      # work around is to make sure Tidy always has bad html
+      # good html breaks is with a segmant fault
       tidy.clean(html + '<br>')
     end
     
@@ -109,7 +99,7 @@ module HtmlManager
           elem = tags.reverse.first
           elem.to_plain_text
           # remove all symbols and numbers and grab all remaining words over the length of 2
-          text_list = elem.inner_text.to_ascii.downcase.gsub(/\b([^A-Za-z\s]+)\b/, ' ').scan(/[\w+]{2,}/)
+          text_list = elem.inner_text.to_iso.downcase.gsub(/\b([^A-Za-z\s]+)\b/, ' ').scan(/[\w+]{2,}/)
           add_to_collection(text_list, col, tag)
           # remove element from document after text is extracted
           elem.remove
