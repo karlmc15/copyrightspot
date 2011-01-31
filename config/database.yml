@@ -3,8 +3,8 @@ development:
   database: cspot_development
   adapter: mysql
   encoding: utf8
-  username: ruby
-  password: qwerty89  
+  username: root
+  password:   
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -13,8 +13,8 @@ test:
   database: cspot_test
   adapter: mysql
   encoding: utf8
-  username: ruby
-  password: qwerty89
+  username: root
+  password: 
 
 production:
   database: cspot_production

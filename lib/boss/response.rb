@@ -23,6 +23,7 @@ module Boss
     end
     
     def result_set
+      return [] if @response["resultset_#{@method}"].nil?
       @resultset ||= @response["resultset_#{@method}"].inject([]) do |col, result|
         col << Boss::Result.new(result)
       end

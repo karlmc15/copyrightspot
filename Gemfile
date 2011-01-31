@@ -10,6 +10,7 @@ gem 'feedtools', '0.2.29', :require => 'feed_tools'
 gem 'will_paginate', '2.3.11'
 gem 'curb'
 gem 'i18n'
+gem 'memcache-client'
 
 group :test do
   gem "rspec", '1.3.1'
