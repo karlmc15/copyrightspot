@@ -9,6 +9,7 @@ gem 'asciify', '0.1.0'
 gem 'feedtools', '0.2.29', :require => 'feed_tools'
 gem 'will_paginate', '2.3.11'
 gem 'curb'
+gem 'i18n'
 
 group :test do
   gem "rspec", '1.3.1'
