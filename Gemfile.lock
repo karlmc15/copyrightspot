@@ -1,0 +1,55 @@
+GEM
+  remote: http://rubygems.org/
+  specs:
+    actionmailer (2.3.8)
+      actionpack (= 2.3.8)
+    actionpack (2.3.8)
+      activesupport (= 2.3.8)
+      rack (~> 1.1.0)
+    activerecord (2.3.8)
+      activesupport (= 2.3.8)
+    activeresource (2.3.8)
+      activesupport (= 2.3.8)
+    activesupport (2.3.8)
+    amatch (0.2.5)
+    asciify (0.1.0)
+    builder (3.0.0)
+    curb (0.7.10)
+    feedtools (0.2.29)
+      activerecord (>= 1.10.1)
+      builder (>= 1.2.4)
+      uuidtools (>= 1.0.0)
+    hpricot (0.6.164)
+    mysql (2.8.1)
+    rack (1.1.0)
+    rails (2.3.8)
+      actionmailer (= 2.3.8)
+      actionpack (= 2.3.8)
+      activerecord (= 2.3.8)
+      activeresource (= 2.3.8)
+      activesupport (= 2.3.8)
+      rake (>= 0.8.3)
+    rake (0.8.7)
+    rspec (1.3.1)
+    rspec-rails (1.3.3)
+      rack (>= 1.0.0)
+      rspec (= 1.3.1)
+    tidy (1.1.2)
+    uuidtools (2.1.1)
+    will_paginate (2.3.11)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  amatch
+  asciify (= 0.1.0)
+  curb
+  feedtools (= 0.2.29)
+  hpricot (= 0.6.164)
+  mysql
+  rails (= 2.3.8)
+  rspec (= 1.3.1)
+  rspec-rails (= 1.3.3)
+  tidy (= 1.1.2)
+  will_paginate (= 2.3.11)
